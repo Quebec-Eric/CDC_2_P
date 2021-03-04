@@ -1,1 +1,1 @@
-#  Algoritmos e Estruturas de Dados II 
+# 2° período do curso Ciência da Computação Puc Minas
