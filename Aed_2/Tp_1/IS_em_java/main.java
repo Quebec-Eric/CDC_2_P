@@ -1,4 +1,4 @@
-public class Is{
+public class main{
     char[] vogais = {65,69,73,79,85,97,101,105,111,117};
   /**
    * Funcao da funcao Testar: Verificar se a entrada no teclado e diferente da palavra FIM , com isso retornara um valor booleano
@@ -17,23 +17,24 @@ public class Is{
        while(Testar(entrada)!=true) {
 
      if  (Somvogais(entrada)==true)
-         System.out.print("SIM ");
+          MyIO.print("SIM ");
     else
-         System.out.print("NAO ");
+          MyIO.print("NAO ");
      if (SoComso(entrada)==true)
-         System.out.print("SIM ");
+          MyIO.print("SIM ");
+
     else
-         System.out.print("NAO ");
+           MyIO.print("NAO ");
       if (ContemNi(entrada)==true)
-         System.out.print("SIM ");
+          MyIO.print("SIM ");
     else
-         System.out.print("NAO ");
+           MyIO.print("NAO ");
 
       if (ContenNR(entrada)==true)
 
-         System.out.println("SIM ");
+           MyIO.print("SIM\n");
      else
-         System.out.println("NAO ");
+          MyIO.print("NAO\n");
 
         entrada = MyIO.readLine();
 
@@ -100,14 +101,28 @@ public class Is{
      return saber;
  }
 
+ public static boolean testeSupremo(String pato){
+  boolean saber = false;
+  int testeSupremo =0;
+  for (int i =0 ;i<pato.length();i++  ) {
+
+          if((pato.charAt(i) >= '0' && pato.charAt(i) <= '9')){
+           saber =true;
+      }
+
+  }
+    return saber;
+ }
+
  public static boolean ContenNR(String pato){
 
    boolean saber = false;
+  // System.out.println(pato);
     for (int i =0 ;i<pato.length();i++  ) {
 
-            if(!contemletra(pato.charAt(i))){
+            if(!contemletra(pato.charAt(i)) ){
 
-              saber = true;
+              saber = testeSupremo(pato);
             }
       }
   return saber;
