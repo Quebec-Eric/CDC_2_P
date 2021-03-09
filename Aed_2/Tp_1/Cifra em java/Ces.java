@@ -13,23 +13,18 @@ public class Ces {
 
     public static void main (String[] args )throws Exception{
     String resposta="";
-    Scanner ler = new Scanner(System.in);
+    String entrada = MyIO.readLine();
+    System.out.println(entrada);
 
-      String entrada = MyIO.readLine();
-
-         String print21 = new String(entrada.getBytes(), "UTF-8");
-          System.out.println(print21);
       /*
         o While ira ler do teclado e so ira parar a sua execucao quando a palavra for FIM, fazendo esse teste por meio da
          funcao Testar
       */
-
-
        while(Testar(entrada)!=true){
 
        resposta=  Crip(entrada);
-       String print = new String(resposta.getBytes("UTF-8"), "ISO-8859-1");
-       System.out.println(print);
+       String testar = new String(resposta.getBytes("UTF-8"), "ISO-8859-1");
+       System.out.println(testar);
        entrada = MyIO.readLine();
 
     }
