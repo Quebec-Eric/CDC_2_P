@@ -48,12 +48,14 @@ public class Arqu{
                  for(int i =0;i<quantidade;i++){
                   file.seek((quantidade-1-i)*8);
                  double numero=file.readDouble();
-
-                System.out.println((int)numero);
-
+                 if(numero%1!=0)
+                   MyIO.println(numero);
+               else
+                   MyIO.println((int)numero);
+                 }
                file.close();
            }
-         }
+
            catch(Exception e)
        {
 
