@@ -60,39 +60,39 @@ class Html2 {
                             o++;
                         } else if (resposta.charAt(z) == 'u') {
                             u++;
-                        } else if (resposta.charAt(z) == 'á') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             a1++;
-                        } else if (resposta.charAt(z) == 'é') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             e1++;
-                        } else if (resposta.charAt(z) == 'í') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             i1++;
-                        } else if (resposta.charAt(z) == 'ó') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             o1++;
-                        } else if (resposta.charAt(z) == 'ú') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             u1++;
-                        } else if (resposta.charAt(z) == 'à') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             a2++;
-                        } else if (resposta.charAt(z) == 'è') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             e2++;
-                        } else if (resposta.charAt(z) == 'ì') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             i2++;
-                        } else if (resposta.charAt(z) == 'ò') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             o2++;
-                        } else if (resposta.charAt(z) == 'ù') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             u2++;
-                        } else if (resposta.charAt(z) == 'ã') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             a3++;
-                        } else if (resposta.charAt(z) == 'õ') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             o3++;
-                        } else if (resposta.charAt(z) == 'â') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             a4++;
-                        } else if (resposta.charAt(z) == 'ê') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             e3++;
-                        } else if (resposta.charAt(z) == 'î') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             i3++;
-                        } else if (resposta.charAt(z) == 'ô') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             o4++;
-                        } else if (resposta.charAt(z) == 'û') {
+                        } else if (resposta.charAt(z) == 'ï¿½') {
                             u3++;
                         } else {
                             consoantes++;
@@ -177,8 +177,8 @@ class Html2 {
         while (Testar(paginaH) != true) {
             String endereco = MyIO.readLine();
             int[] vetor = getHtml(endereco);
-            MyIO.setCharset("UTF-8");
-          MyIO.println("a(" + vetor[0] + ") e(" + vetor[1] + ") i(" + vetor[2] + ") o(" + vetor[3] + ") u(" + vetor[4] + ") á(" + vetor[5] + ") é(" + vetor[6] + ") í(" + vetor[7] + ") ó(" + vetor[8] + ") ú(" + vetor[9] + ") à(" + vetor[10] + ") è(" + vetor[11] + ") ì(" + vetor[12] + ") ò(" + vetor[13] + ") ù(" + vetor[14] + ") ã(" + vetor[15] + ") õ(" + vetor[16] + ") â(" + vetor[17] + ") ê(" + vetor[18] + ") î(" + vetor[19] + ") ô(" + vetor[20] + ") û(" + vetor[21] + ") consoante(" + vetor[22] + ") <br>(" + vetor[23] + ") <table>(" + vetor[24] + ") " + paginaH);
+        //    MyIO.setCharset("UTF-8");
+          MyIO.println("a(" + vetor[0] + ") e(" + vetor[1] + ") i(" + vetor[2] + ") o(" + vetor[3] + ") u(" + vetor[4] + ") ï¿½(" + vetor[5] + ") ï¿½(" + vetor[6] + ") ï¿½(" + vetor[7] + ") ï¿½(" + vetor[8] + ") ï¿½(" + vetor[9] + ") ï¿½(" + vetor[10] + ") ï¿½(" + vetor[11] + ") ï¿½(" + vetor[12] + ") ï¿½(" + vetor[13] + ") ï¿½(" + vetor[14] + ") ï¿½(" + vetor[15] + ") ï¿½(" + vetor[16] + ") ï¿½(" + vetor[17] + ") ï¿½(" + vetor[18] + ") ï¿½(" + vetor[19] + ") ï¿½(" + vetor[20] + ") ï¿½(" + vetor[21] + ") consoante(" + vetor[22] + ") <br>(" + vetor[23] + ") <table>(" + vetor[24] + ") " + paginaH);
     //    String resposta=    new String(ax.getBytes("UTF-8"), "ISO-8859-1");
       //  System.out.println(resposta)
             paginaH = MyIO.readLine();

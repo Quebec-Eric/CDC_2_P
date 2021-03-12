@@ -177,7 +177,7 @@ class Html {
         while (Testar(paginaH) != true) {
             String endereco = MyIO.readLine();
             int[] vetor = getHtml(endereco);
-            MyIO.setCharset("UTF-8");
+          //  MyIO.setCharset("UTF-8");
           MyIO.println("a(" + vetor[0] + ") e(" + vetor[1] + ") i(" + vetor[2] + ") o(" + vetor[3] + ") u(" + vetor[4] + ") á(" + vetor[5] + ") é(" + vetor[6] + ") í(" + vetor[7] + ") ó(" + vetor[8] + ") ú(" + vetor[9] + ") à(" + vetor[10] + ") è(" + vetor[11] + ") ì(" + vetor[12] + ") ò(" + vetor[13] + ") ù(" + vetor[14] + ") ã(" + vetor[15] + ") õ(" + vetor[16] + ") â(" + vetor[17] + ") ê(" + vetor[18] + ") î(" + vetor[19] + ") ô(" + vetor[20] + ") û(" + vetor[21] + ") consoante(" + vetor[22] + ") <br>(" + vetor[23] + ") <table>(" + vetor[24] + ") " + paginaH);
     //    String resposta=    new String(ax.getBytes("UTF-8"), "ISO-8859-1");
       //  System.out.println(resposta)
