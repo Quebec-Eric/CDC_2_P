@@ -1,3 +1,6 @@
+/**
+ * @author Eric Azevedo de Oliveira 
+*/
 public class iSemjava{
     
   /**
