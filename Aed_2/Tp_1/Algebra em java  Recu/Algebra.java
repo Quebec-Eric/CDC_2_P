@@ -52,6 +52,10 @@ public class Algebra{
        return valores;
     } // Fim pegarV
 
+  
+  
+
+
     // retornar apenas a expressao
     public static String expressaoV(String pato, int i , String ExpressaoT ) {
         if(i==pato.length()){
