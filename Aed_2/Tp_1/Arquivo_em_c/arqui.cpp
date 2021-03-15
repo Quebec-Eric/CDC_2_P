@@ -24,8 +24,8 @@ void abrirarquivo(int quantidade){
 
 // inicio ler arquivo
 void lerarquivo(int quantidade){
-	double numero=0;;
-	int resposta=0;
+	
+	
 	// abrir arquivo como leitura
  FILE * arquivo =fopen("arquivo.txt", "rb");
 	if(arquivo == NULL){
@@ -33,33 +33,34 @@ void lerarquivo(int quantidade){
 		printf("Erro ao abrir arquivo\n");
 	}
 	else{
-		 for(int i=0;i<quantidade;i++)
-    {
+		 for(int i=0;i<quantidade;i++){
+    	double numero=0;
          // ler a cada 8 bits que e o tamanho de uma variavel; doble
         fseek(arquivo,  (quantidade-1-i)*8, SEEK_SET);
         fread(&numero, sizeof(double), 1, arquivo);
-         resposta=numero;
-         // testar para ver se ela E INTERIRA
-        if(numero-resposta!=0)
+        int numeroInteiro;
+        int resultado;
+        resultado=numero;
+        if(numero-resultado!=0)
         {
-            printf("%d\n", numero);
+            printf("%g\n", numero);
         }
         else
         {
-            printf("%d\n", resposta);
+            printf("%d\n", resultado);
         }
         
     }
-
-	}
 	fclose(arquivo);
         
 } //Fim ler arquivo
+}
 
 // int main
 int main (){
  int quantidade=0;
  scanf("%d\n", &quantidade);
  abrirarquivo(quantidade);
+ lerarquivo(quantidade);
 } // fim int main
 
