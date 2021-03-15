@@ -1,4 +1,4 @@
-public class Algebra{
+public class AlgebraRecu{
 
                             //   1          0         0          1           1           1           0
   static String [] expessoesE={ "not(0)", "not(1)", "or(0,0)", "or(0,1)", "or(1,0)", "or(1,1)", "and(0,0)",
@@ -21,8 +21,15 @@ public class Algebra{
      static String [] resultadosE={ "1", "0", "0", "1", "1", "1", "0", "0", "0", "1", "0", "1", "1", "1", "1", "1", "1", "1",
              "0", "0", "0", "0", "0", "0", "0", "1", "0", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
              "1", "1", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1" };
-
-  // tirar o espaco da entrada
+  
+    /**
+   * Funcao da funcao Semespaco: Tirar o espaco da string
+   * @param String pato ; string que o espaco ainda nao foi retirado
+   * @param String tirar2; string que sera retornada sem o espaco
+   * @param  int  i2 ; usar como finalizador da funcao
+   * @return String tirar2 ; string nova sem os espacos
+   */ 
+     // inicio Semespaco  
      public static String Semespaco(String pato, int i2 , String tirar2) {
        if(i2==pato.length())
          return tirar2;
@@ -37,7 +44,12 @@ public class Algebra{
        
    } // Fim Semespaco
 
-    // pegar os valores binarios
+   /**
+   * Funcao da funcao PegarV: ira adentrar na String e pegar os valores binarios 
+   * @param String pato ; string onde estao os valores binarios
+   * @return Int [] valores ; array onde os valores foram armazenados
+   */ 
+    // inicio PegarV
     public static int [] PegarV (String  pato){
     int tamanho = Character.getNumericValue(pato.charAt(0));
          int[] valores = new int[tamanho];
@@ -52,11 +64,12 @@ public class Algebra{
        return valores;
     } // Fim pegarV
 
-  
-  
-
-
-    // retornar apenas a expressao
+   /**
+   * Funcao da funcao PegarV: pegar somente as expressoes boleanas da string 
+   * @param String pato ; string onde estao as expressoes boleanas
+   * @return String ExpressaoT ; onde somente as expressoes boleanas vao estar
+   */ 
+    // inicio expressaoV
     public static String expressaoV(String pato, int i , String ExpressaoT ) {
         if(i==pato.length()){
 
@@ -76,8 +89,14 @@ public class Algebra{
        
       
    } //Fim expresssao
-
-   // colocar os valores na Expressao
+    
+   /**
+   * Funcao da funcao alocarEx ; a qual os valores binarios serao colocados na expressao
+   * @param String pato ;a qual esta a expressao boleana
+   * @param int[] tamanho ;onde estao os valores   
+   * @return String Algebracom ; onde a algebra e os valores vao estar justos
+   */
+   // inicio alocarEx
    public static String alocarEx(String  pato, int[] tamanho){
      String Algebracompleta = "";
             for (int i = 0; i < pato.length(); i++) {
@@ -100,7 +119,12 @@ public class Algebra{
 
 
 
-    // executar a algebra
+   /**
+   * Funcao da funcao oFim ; funcao na qual ira chamar outra funcao
+   * @param String global
+   * @return String global; ira retornar a expressao resolvida
+   */
+    // inico o oFim
     public static String oFim (String global){
       global = algebraExc(global);
        return global;
@@ -122,8 +146,14 @@ public class Algebra{
         }
     }
     return saber;
-  } // Fim testar
- // ira pegar os valores da expressao com isso ira identificar qual e cada com isso devolvendo a algebra
+  } /// Fim testar
+
+   /**
+   * Funcao da funcao algebraExc ; ira pegar procurar na String global expressaotv qual expressao e igual a ela e com isso retornar a verdade
+   * @param String pato , onde a expressao boleana da entrada esta
+   * @return String pato; onde o resultado ira voltar 
+   */
+   // inicio algebraExc 
   public static String algebraExc(String pato) {
         int pFrase=0;
         int  iPadrao = 0;
@@ -143,8 +173,13 @@ public class Algebra{
     }
     // fim algebraExc
   // -----------------------------------------------------
-
-
+ /**
+   * Funcao da funcao algebraExc ; ira pegar procurar na String global expressaotv qual expressao e igual a ela e com isso retornar a verdade
+   * @param String pato , onde esta a espresao booleana
+   * @param  String expressaoTV onde se encontra a parte iguak 
+   * @return int indece saber se aquele e o indece da expressao
+   */
+       // inicio indiceFrase
       public static int indiceFrase(String frase, String expressaoTV) {
           int indice = -1;
           if (expressaoTV.length() <= frase.length()) {
@@ -159,8 +194,15 @@ public class Algebra{
               }
           }
           return indice;
-      }
-
+      }// fim indice
+       /**
+   * Funcao da funcao algebraExc ; ira pegar procurar na String global expressaotv qual expressao e igual a ela e com isso retornar a verdade
+   * @param String pato , onde esta a espresao booleana
+   * @param String expressaoTV onde se encontra a parte iguak 
+   * @param int  localizar onde estar a correspondende da expressao
+   * @return boolean verificar se o indice e igula seu teste com isso retorna true ou false
+   */
+       // inicio SaberV  
       public static boolean SaberV(String pato, String expressaoTV , int i) {
           boolean saber = true;
           int j = 0;
@@ -173,8 +215,16 @@ public class Algebra{
 
           }
           return saber;
-      }
+      }// fim SaberV
 
+       /**
+   * Funcao da funcao algebraExc ; ira pegar procurar na String global expressaotv qual expressao e igual a ela e com isso retornar a verdade
+   * @param String pato , onde a expressao boleana da entrada esta
+    *@param int vExpressao local onde pode se encontrar a frase
+    *@param int indicePadrao local onde se encontra a correlacao da VExpressao
+   * @return String novaExpressao expressao correlacionada
+   */
+     //inicio trocarBooleano
       public static String trocaBooleano(String pato, int vExpressao, int indicePadrao) {
           String novaExpressao = "";
           for (int i = 0; i < pato.length(); i++) {
@@ -189,7 +239,12 @@ public class Algebra{
           return novaExpressao;
       }
 //-------------------------------------------------
- // funcao na qual ira chamar outras funcoes
+/**
+* Funcao da funcao Retornar_a_verdade ; funcao que guia praticamente todo o programa
+* @param String entrada ; onde a entrada do teclado se encontra
+* @return String tirarEspaco , o fim do programa 
+*/
+ //  inicio Retornar_a_verdade
    public  static String Retornar_a_verdade(String  entrada){
      boolean saber =true;
 
@@ -209,7 +264,7 @@ public class Algebra{
     return tirarEspaco;
   } //fim Retornar_a_verdade
 
-    // funcao main
+    // inicio main
     public static void main (String[]args){
 
         String entrada =MyIO.readLine();
