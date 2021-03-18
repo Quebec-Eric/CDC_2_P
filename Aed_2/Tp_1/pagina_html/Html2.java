@@ -36,7 +36,7 @@ class Html2 {
         try {
             String resposta = "";
             url = new URL(endereco);
-            is = url.openStream();  // throws an IOException
+            is = url.openStream();  
             br = new BufferedReader(new InputStreamReader(is));
 
             while ((line = br.readLine()) != null) {
@@ -177,7 +177,7 @@ class Html2 {
         while (Testar(paginaH) != true) {
             String endereco = MyIO.readLine();
             int[] vetor = getHtml(endereco);
-        //    MyIO.setCharset("UTF-8");
+         //   MyIO.setCharset("UTF-8");
           MyIO.println("a(" + vetor[0] + ") e(" + vetor[1] + ") i(" + vetor[2] + ") o(" + vetor[3] + ") u(" + vetor[4] + ") �(" + vetor[5] + ") �(" + vetor[6] + ") �(" + vetor[7] + ") �(" + vetor[8] + ") �(" + vetor[9] + ") �(" + vetor[10] + ") �(" + vetor[11] + ") �(" + vetor[12] + ") �(" + vetor[13] + ") �(" + vetor[14] + ") �(" + vetor[15] + ") �(" + vetor[16] + ") �(" + vetor[17] + ") �(" + vetor[18] + ") �(" + vetor[19] + ") �(" + vetor[20] + ") �(" + vetor[21] + ") consoante(" + vetor[22] + ") <br>(" + vetor[23] + ") <table>(" + vetor[24] + ") " + paginaH);
     //    String resposta=    new String(ax.getBytes("UTF-8"), "ISO-8859-1");
       //  System.out.println(resposta)
