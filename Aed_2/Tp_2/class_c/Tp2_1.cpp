@@ -31,6 +31,7 @@ Musica Clone_music(Musica music)
     return music;
 }
 
+void fazerTudo(char *entrada);
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile);
 Musica getArtistis(char *readFile, Musica music, int lenghtReadFile);
 void get3Information(char *readFile, Musica music, int lenghtReadFile);
@@ -44,44 +45,55 @@ char *getFrist(char *newString, int sizeofString, Musica music);
 char *getLast(char *newString, int sizeofString, Musica music);
 int main()
 {
-    char pubIn[50];
-    fgets(pubIn, sizeof(pubIn), stdin);
-    pubIn[strlen(pubIn) - 1] = '\0';
-    int lengthPubIN = sizeof(pubIn);
+    char entrada[2000];
+    fgets(entrada, 400, stdin);
+    entrada[strlen(entrada) - 1] = '\0';
 
-    while (strcmp(pubIn, "FIM") != 0)
+    int tamanho = strlen(entrada) - 1;
+    int t2 = tamanho;
+
+    while (strcmp(entrada, "FIM") != 0)
     {
-        FILE *csvFile = fopen("data.csv", "r");
-        if (csvFile == NULL)
-        {
-            printf("Erro");
-        }
-        else
-        {
-            Musica music;
-            char readFile[400];
-            fgets(readFile, sizeof(readFile), csvFile);
-            while (fgets(readFile, sizeof(readFile), csvFile))
-            {
-                int lengthReadFile = sizeof(readFile);
 
-                if (strstr(readFile, pubIn) != NULL)
-                {
-                    music = getArtistis(readFile, music, lengthReadFile);
-                    get3Information(readFile, music, lengthReadFile);
-                    char *newString = getNewString(readFile, lengthReadFile);
-                    //printf("%s", newString);
-                    int newlenght = getLengthString(readFile, lengthReadFile);
-                    music = picTheLast(newString, newlenght, music);
-                    // printf("%s",music.artistis);
-                    toString(music);
-                }
+        fazerTudo(entrada);
+        fgets(entrada, 400, stdin);
+        entrada[strlen(entrada) - 1] = '\0';
+        tamanho = strlen(entrada) - 1;
+        t2 = tamanho;
+    }
+}
+
+void fazerTudo(char *entrada)
+{
+    FILE *csvFile = fopen("data.csv", "r");
+    if (csvFile == NULL)
+    {
+        printf("Erro");
+    }
+    else
+    {
+        Musica music;
+        char readFile[400];
+        fgets(readFile, sizeof(readFile), csvFile);
+        while (fgets(readFile, sizeof(readFile), csvFile))
+        {
+            int lengthReadFile = sizeof(readFile);
+
+            if (strstr(readFile, entrada) != NULL)
+            {
+                music = getArtistis(readFile, music, lengthReadFile);
+                get3Information(readFile, music, lengthReadFile);
+                char *newString = getNewString(readFile, lengthReadFile);
+                //printf("%s", newString);
+                int newlenght = getLengthString(readFile, lengthReadFile);
+                music = picTheLast(newString, newlenght, music);
+                // printf("%s",music.artistis);
+                toString(music);
             }
         }
-        fgets(pubIn, sizeof(pubIn), stdin);
-        pubIn[strlen(pubIn) - 1] = '\0';
-        lengthPubIN = sizeof(pubIn);
     }
+
+    fclose(csvFile);
 }
 
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile)
