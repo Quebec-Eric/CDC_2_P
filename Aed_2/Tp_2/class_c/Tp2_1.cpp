@@ -599,7 +599,7 @@ void displayFormattedDate(Date *d)
 {
     printf("%0*d/%0*d/%0*d", 2, d->day, 2, d->month, 4, d->year);
 }
-
+//s
 void insertDate(Date *d, char *stringData)
 {
     char day[3];
