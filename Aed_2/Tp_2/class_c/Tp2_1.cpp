@@ -1,7 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
+#include <string.h>
+#include <math.h>
+#define MAXTAM 400
+typedef struct
+{
+    int day;
+    int month;
+    int year;
+} Date;
 
 typedef struct
 {
@@ -10,7 +18,7 @@ typedef struct
     char key[20];
     char artistis[98];
     int num_artists;
-    char release_date[12];
+    Date release_date[12];
     double acousticness;
     double danceability;
     double energy;
@@ -31,10 +39,9 @@ Musica Clone_music(Musica music)
     return music;
 }
 
-void fazerTudo(char *entrada);
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile);
 Musica getArtistis(char *readFile, Musica music, int lenghtReadFile);
-void get3Information(char *readFile, Musica music, int lenghtReadFile);
+Musica get3Information(char *readFile, Musica music, int lenghtReadFile);
 char *getNewString(char *readFile, int lenghtReadFile);
 Musica picTheLast(char *newString, int sizoFNew, Musica music);
 bool haveOR(char *String, int lenghtString);
@@ -43,57 +50,76 @@ int getLengthString(char *String, int lenaghtOldString);
 Musica gatNameOfMusic(char *newString, int sizoFNew, Musica music);
 char *getFrist(char *newString, int sizeofString, Musica music);
 char *getLast(char *newString, int sizeofString, Musica music);
+Musica fazerTudo(char *readFile, int lengthReadFile);
+void insertDate(Date *d, char *stringData);
+void displayFormattedDate(Date *d);
+double handle_percentage(double value);
+
 int main()
 {
-    char entrada[2000];
-    fgets(entrada, 400, stdin);
-    entrada[strlen(entrada) - 1] = '\0';
+    char *entradas[MAXTAM];
+    for (int i = 0; i < MAXTAM; i++)
+        entradas[i] = (char *)calloc(100, sizeof(char));
 
-    int tamanho = strlen(entrada) - 1;
-    int t2 = tamanho;
-
-    while (strcmp(entrada, "FIM") != 0)
+    int variacaoENtradas = 0;
+    do
     {
+        scanf("%s", entradas[variacaoENtradas]);
+    } while (strncmp(entradas[variacaoENtradas++], "FIM", 3) != 0 && variacaoENtradas < MAXTAM);
 
-        fazerTudo(entrada);
-        fgets(entrada, 400, stdin);
-        entrada[strlen(entrada) - 1] = '\0';
-        tamanho = strlen(entrada) - 1;
-        t2 = tamanho;
-    }
-}
+    FILE *arquivo = fopen("/tmp/data.csv", "r");
 
-void fazerTudo(char *entrada)
-{
-    FILE *csvFile = fopen("data.csv", "r");
-    if (csvFile == NULL)
+    if (arquivo != NULL)
     {
-        printf("Erro");
-    }
-    else
-    {
-        Musica music;
-        char readFile[400];
-        fgets(readFile, sizeof(readFile), csvFile);
-        while (fgets(readFile, sizeof(readFile), csvFile))
+        char readFile[1000];
+        int ghj = 0;
+
+        Musica eric[variacaoENtradas];
+
+        while (fgets(readFile, sizeof(readFile), arquivo) != NULL && ghj < variacaoENtradas)
         {
-            int lengthReadFile = sizeof(readFile);
-
-            if (strstr(readFile, entrada) != NULL)
+            for (int y = 0; y < variacaoENtradas; y++)
             {
-                music = getArtistis(readFile, music, lengthReadFile);
-                get3Information(readFile, music, lengthReadFile);
-                char *newString = getNewString(readFile, lengthReadFile);
-                //printf("%s", newString);
-                int newlenght = getLengthString(readFile, lengthReadFile);
-                music = picTheLast(newString, newlenght, music);
-                // printf("%s",music.artistis);
-                toString(music);
+                if (strstr(readFile, entradas[y]))
+                {
+                    int lengthReadFile = sizeof(readFile) - 1;
+                    //printf("%s\n", entradas[y]);
+                    eric[ghj] = fazerTudo(readFile, lengthReadFile);
+
+                    ghj++;
+                    y = variacaoENtradas + 1;
+                }
+            }
+        }
+        for (int e = 0; e < ghj; e++)
+        {
+            for (int j = 0; j < ghj; j++)
+            {
+                if (strstr(eric[j].iid, entradas[e]))
+                {
+                    toString(eric[j]);
+                }
             }
         }
     }
+    for (int i = 0; i < MAXTAM; i++)
+    {
+        free(entradas[i]);
+    }
+}
 
-    fclose(csvFile);
+Musica fazerTudo(char *readFile, int lengthReadFile)
+{
+    Musica eric;
+
+    eric = getArtistis(readFile, eric, lengthReadFile); // ok aki
+    eric = get3Information(readFile, eric, lengthReadFile);
+    char *newString = getNewString(readFile, lengthReadFile);
+    //printf("%s", newString);
+    int newlenght = getLengthString(readFile, lengthReadFile);
+    eric = picTheLast(newString, newlenght, eric);
+    //toString(eric);
+    return eric;
 }
 
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile)
@@ -118,8 +144,10 @@ Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
     int testar = 0;
     int fritPosition = caracterPosition('[', readFile, lenghtReadFile);
     int lastPosition = caracterPosition(']', readFile, lenghtReadFile);
-    //printf("-----%d\n",fritPosition);
+    // printf("<<<<%d\n", lenghtReadFile);
+    // printf("-----%d\n",fritPosition);
     //printf("=====%d\n",lastPosition);
+    //printf("?>>>>>%s\n",readFile);
     char artistis1[lastPosition - fritPosition - 2];
     int p = 0;
     for (int i = fritPosition; i <= lastPosition; i += 1)
@@ -132,14 +160,15 @@ Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
     }
     artistis1[p] = '\0';
     artistis1[strlen(artistis1)] = '\0';
+    //  printf("%s\n",artistis1);
     strcpy(music.artistis, artistis1);
     //printf("%s\n",artistis1);
     //scanf("%d",&testar);
-    //printf("%s",music.artistis);
+    //printf("============%s\n",music.artistis);
     return music;
 }
 
-void get3Information(char *readFile, Musica music, int lenghtReadFile)
+Musica get3Information(char *readFile, Musica music, int lenghtReadFile)
 {
 
     int endOfInformation = caracterPosition('[', readFile, lenghtReadFile);
@@ -158,6 +187,7 @@ void get3Information(char *readFile, Musica music, int lenghtReadFile)
     information[strlen(information)] = '\0';
     // printf("%s\n", information);
     float values[3];
+    float *pato = (float *)malloc(sizeof(float) * 3);
     char *piece;
     piece = strtok(information, ",");
     int m = 0;
@@ -172,6 +202,9 @@ void get3Information(char *readFile, Musica music, int lenghtReadFile)
     music.valence = values[0];
     music.year = values[1];
     music.acousticness = values[2];
+    // printf("----------%f\n",music.acousticness);
+
+    return music;
 }
 
 char *getNewString(char *readFile, int lenghtReadFile)
@@ -182,7 +215,7 @@ char *getNewString(char *readFile, int lenghtReadFile)
     char newString[lenghtReadFile - getCutPart];
     char *eric = (char *)malloc(sizeof(char) * (lenghtReadFile - getCutPart));
     int x = 0;
-    getCutPart + 4;
+    //  getCutPart + 4;
     for (int i = getCutPart + 2; i < sizeof(newString) - 1; i += 1)
     {
         newString[x] = readFile[i];
@@ -204,6 +237,10 @@ bool haveOR(char *String, int lenghtString)
     }
     return false;
 }
+double handle_percentage(double value)
+{
+    return ceil(value) == value ? value / 100 : value;
+}
 Musica picTheLast(char *newString, int sizoFNew, Musica music)
 {
 
@@ -217,22 +254,31 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
         int m = 0;
         while (piece1 != NULL)
         {
+            //printf("----------------------------------------------------------------------------------------- ## \n");
             if (m == 0)
             {
                 //danceability
-                ggg[m] = atof(piece1);
-                music.danceability = ggg[m];
+
+                music.danceability = handle_percentage((atof(piece1)));
+                //printf("Danceabil LF%lf\n", music.danceability);
+                //printf("Danceabil GG %G\n", music.danceability);
             }
             else if (m == 1)
             {
                 //duration+ms
-                ggg[m] = atoi(piece1);
-                music.duration_ms = ggg[m];
+                // ggg[m] = atoi(piece1);
+
+                music.duration_ms = handle_percentage(atoi(piece1));
+                //printf("Duration LF %lf\n", music.duration_ms);
+                //printf("Duration GG %G\n", music.duration_ms);
             }
             else if (m == 2)
             {
-                ggg[m] = atof(piece1);
-                music.energy = ggg[m];
+                //ggg[m] = atof(piece1);
+
+                music.energy = handle_percentage(atof(piece1));
+                //printf("Energy LF %lf\n", music.energy);
+                //printf("Energy GG %G\n", music.energy);
             }
             else if (m == 3)
             {
@@ -240,12 +286,17 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
             }
             else if (m == 4)
             {
+                //printf("id ====%s\n", piece1);
                 strcpy(music.iid, piece1);
             }
             else if (m == 5)
             {
-                ggg[m] = atof(piece1);
-                music.instrumentalness = ggg[m];
+                //ggg[m] = atof(piece1);
+
+                music.instrumentalness = handle_percentage(atof(piece1));
+
+                //printf("Instrumenta LF %lf\n", music.instrumentalness);
+                //printf("Instrumenta GG %G\n", music.instrumentalness);
             }
             else if (m == 6)
             {
@@ -255,14 +306,20 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
             else if (m == 7)
             {
                 //liveness
-                ggg[m] = atof(piece1);
-                music.liveness = ggg[m];
+                //ggg[m] = atof(piece1);
+
+                music.liveness = handle_percentage(atof(piece1));
+                //printf(" Liveness LF %lf\n", music.liveness);
+                //printf("Liveness GG %G\n", music.liveness);
             }
             else if (m == 8)
             {
                 //loudness
-                ggg[m] = atof(piece1);
-                music.loudness = ggg[m];
+                // ggg[m] = atof(piece1);
+
+                music.loudness = atof(piece1);
+                //printf(" Liveness LF %lf\n", music.loudness);
+                //printf("loudness GG %G\n", music.loudness);
             }
             m++;
 
@@ -277,25 +334,32 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
             if (y == 0)
             {
                 // popularitu
-                www[y] = atoi(piece2);
-                music.popularity = www[y];
+                //www[y] = atoi(piece2);
+                music.popularity = atoi(piece2);
             }
             else if (y == 1)
             {
                 //realease_date
-                strcpy(music.release_date, piece2);
+
+                insertDate(music.release_date, piece2);
             }
             else if (y == 2)
             {
                 //speechines
-                www[y] = atof(piece2);
-                music.speechiness = www[y];
+                //www[y] = atof(piece2);
+
+                music.speechiness = handle_percentage(atof(piece2));
+                //printf("speechiness LF%lf\n", music.speechiness);
+                //printf("speechiness GG %G\n", music.speechiness);
             }
             else if (y == 3)
             {
                 //tempo
-                www[y] = atof(piece2);
-                music.tempo = www[y];
+                //www[y] = atof(piece2);
+
+                music.tempo = atof(piece2);
+                //printf("Tempo LF%lf\n", music.tempo);
+                //printf("Tempo GG %G\n", music.tempo);
             }
 
             y++;
@@ -312,18 +376,27 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
         {
             if (m == 0)
             {
-                ttt[m] = atof(piece);
-                music.danceability = ttt[m];
+                // ttt[m] = atof(piece);
+
+                music.danceability = handle_percentage(atof(piece));
+                //printf("Danceabil LF%lf\n", music.danceability);
+                //printf("Danceabil GG %G\n", music.danceability);
             }
             else if (m == 1)
             {
-                ttt[m] = atoi(piece);
-                music.duration_ms = ttt[m];
+                //ttt[m] = atoi(piece);
+
+                music.duration_ms = atof(piece);
+                //printf("Duration LF %lf\n", music.duration_ms);
+                //printf("Duration GG %G\n", music.duration_ms);
             }
             else if (m == 2)
             {
-                ttt[m] = atof(piece);
-                music.energy = ttt[m];
+                //ttt[m] = atof(piece);
+
+                music.energy = handle_percentage(atof(piece));
+                //printf("Energy LF %lf\n", music.energy);
+                //printf("Energy GG %G\n", music.energy);
             }
             else if (m == 3)
             {
@@ -332,13 +405,17 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
             else if (m == 4)
             {
                 //id
+                //printf("id ====%s\n", piece);
                 strcpy(music.iid, piece);
             }
             else if (m == 5)
             {
                 //intumwntalness
-                ttt[m] = atof(piece);
-                music.instrumentalness = ttt[m];
+                //ttt[m] = atof(piece);
+
+                music.instrumentalness = handle_percentage(atof(piece));
+                //printf("Instrumenta LF %lf\n", music.instrumentalness);
+                //printf("Instrumenta GG %G\n", music.instrumentalness);
             }
             else if (m == 6)
             {
@@ -349,15 +426,21 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
             {
                 //liveness
 
-                ttt[m] = atof(piece);
-                music.liveness = ttt[m];
+                // ttt[m] = atof(piece);
+
+                music.liveness = handle_percentage(atof(piece));
+                //printf(" Liveness LF %lf\n", music.liveness);
+                //printf("Liveness GG %G\n", music.liveness);
             }
             else if (m == 8)
             {
                 //loudness
 
-                ttt[m] = atof(piece);
-                music.loudness = ttt[m];
+                //ttt[m] = atof(piece);
+
+                music.loudness = atof(piece);
+                //printf(" Liveness LF %lf\n", music.loudness);
+                //printf("loudness GG %G\n", music.loudness);
             }
             else if (m == 9)
             {
@@ -371,25 +454,31 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
             else if (m == 11)
             {
                 //popularity
-                ttt[m] = atoi(piece);
-                music.popularity = ttt[m];
+                // ttt[m] = atoi(piece);
+                music.popularity = atof(piece);
             }
             else if (m == 12)
             {
                 //realease_date
-                strcpy(music.release_date, piece);
+                insertDate(music.release_date, piece);
             }
             else if (m == 13)
             {
                 //speechiness
-                ttt[m] = atof(piece);
-                music.speechiness = ttt[m];
+                //ttt[m] = atof(piece);
+
+                music.speechiness = handle_percentage(atof(piece));
+                //printf("speechiness LF%lf\n", music.speechiness);
+                //printf("speechiness GG %G\n", music.speechiness);
             }
             else
             {
                 //tempo
-                ttt[m] = atof(piece);
-                music.tempo = ttt[m];
+                //ttt[m] = atof(piece);
+
+                music.tempo = atof(piece);
+                //printf("Tempo LF%lf\n", music.tempo);
+                //printf("Tempo GG %G\n", music.tempo);
             }
             m++;
 
@@ -402,11 +491,14 @@ Musica picTheLast(char *newString, int sizoFNew, Musica music)
 
 void toString(Musica music)
 {
+
     printf("%s ## ", music.iid);
     printf("%s ## ", music.artistis);
-    printf("%s ## %s ## %G ## %G ## %G ## %G ## %G ## %G ## %G ## %d\n",
-           music.nome, music.release_date, music.acousticness, music.danceability, music.instrumentalness,
-           music.liveness, music.loudness, music.loudness, music.energy, music.duration_ms);
+    printf("%s ## ", music.nome);
+    displayFormattedDate(music.release_date);
+    printf(" ## %G ## %lf ## %G.0 ## %G ", music.acousticness, music.danceability, music.instrumentalness, music.liveness);
+    printf("## %G ## %G ## %G ##  %d\n", music.loudness, music.speechiness, music.energy, music.duration_ms);
+    // printf("----------------------------------------------------------------------------------------- ## \n");
 }
 
 int getLengthString(char *String, int lenaghtOldString)
@@ -436,7 +528,7 @@ Musica gatNameOfMusic(char *newString, int sizoFNew, Musica music)
         x += 1;
     }
     int local = 0;
-    for (x; x > 0; x--)
+    for (; x > 0; x--)
     {
         if (newString[x] == '"')
         {
@@ -501,4 +593,43 @@ char *getLast(char *newString, int sizeofString, Musica music)
     }
     strcpy(eric, lastCurString);
     return eric;
+}
+
+void displayFormattedDate(Date *d)
+{
+    printf("%0*d/%0*d/%0*d", 2, d->day, 2, d->month, 4, d->year);
+}
+
+void insertDate(Date *d, char *stringData)
+{
+    char day[3];
+    char month[3];
+    char year[5];
+
+    strncpy(year, stringData, 4);
+    d->year = atoi(year);
+
+    if (stringData[4] != '-')
+    {
+        strcpy(month, "01");
+    }
+
+    else
+    {
+        month[0] = stringData[5];
+        month[1] = stringData[6];
+    }
+
+    if (stringData[7] != '-')
+    {
+        strcpy(day, "01");
+    }
+    else
+    {
+        day[0] = stringData[8];
+        day[1] = stringData[9];
+    }
+    d->month = atof(month);
+    d->year = atof(year);
+    d->day = atof(day);
 }

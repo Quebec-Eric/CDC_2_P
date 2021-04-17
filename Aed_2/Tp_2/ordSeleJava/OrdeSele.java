@@ -206,7 +206,7 @@ public class OrdeSele {
 
 		}
 		try {
-			conteudoCsv = new BufferedReader(new FileReader("/tmp/data.csv"));
+			conteudoCsv = new BufferedReader(new FileReader("data.csv"));
 			String[] saidas = new String[variarAloca];
 			int y = 0;
 			linhaArquivo = conteudoCsv.readLine();
@@ -239,13 +239,13 @@ public class OrdeSele {
               nomes[x]=localizarPegar(saidas[x]);
           }
        		String []resultado= selectionQ(nomes,nomes.length);
-       		 
+
         	/*for(int i=0;i<saidas.length;i+=1){
-            
+
                System.out.println(resultado[i]);
-			} */   
-            
-			
+			} */
+
+
 			for (int p = 0; p < resultado.length; p += 1) {
 				for (int j = 0; j < saidas.length; j += 1) {
 					if (localizarPegar(saidas[j]).equals(resultado[p])) {
@@ -253,12 +253,12 @@ public class OrdeSele {
 					}
 				}
 			}
-			
-		
+
+
         }
-		
-		
-    
+
+
+
 	  public static String[] selectionQ(String[] arr, int n) {
 
 		for (int i = 0; i < n - 1; i++) {
@@ -282,7 +282,7 @@ public class OrdeSele {
 		return arr;
 
 	}
-	
+
 
 	/* Funcao onde ira alocar todas na class */
 	public static Musica extrairMusica(String linha) {
@@ -353,11 +353,11 @@ public class OrdeSele {
     String todosNomes = linha.substring(inicioaSerCortado + 1, fimaSerCortado);
     String[] tirarVirgula = todosNomes.split(",");
     if (tirarVirgula.length > 1) {
-     
+
       for (int i = 0; i < tirarVirgula.length; i++) {
       if (tirarVirgula[i].charAt(1) == tt && tirarVirgula[i].charAt(2) == tt) {
 
-      } 
+      }
       }
        String[] eric = todosNomes.split("'");
           for (int k = 0; k < eric.length; k += 1) {
@@ -384,7 +384,7 @@ public class OrdeSele {
     }
     return nomes;
   }
-	
+
 
 	public static String[] pegarPrimeirosValores(String linha) {
 		int fimaSerCortado = linha.indexOf("[");
