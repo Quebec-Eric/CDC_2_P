@@ -19,7 +19,7 @@ typedef struct
     char artistis[98];
     int num_artists;
     Date release_date[12];
-    char acousticness [20];
+    char acousticness[20];
     char danceability[20];
     char energy[20];
     int duration_ms;
@@ -54,6 +54,8 @@ Musica fazerTudo(char *readFile, int lengthReadFile);
 void insertDate(Date *d, char *stringData);
 void displayFormattedDate(Date *d);
 double handle_percentage(double value);
+Musica *insercaoPorCor(Musica *eric, int n, int cor, int h);
+Musica *shellsort(Musica *eric, int n);
 
 int main()
 {
@@ -91,15 +93,10 @@ int main()
                 }
             }
         }
+        Musica *resposta = shellsort(eric, variacaoENtradas);
         for (int e = 0; e < ghj; e++)
         {
-            for (int j = 0; j < ghj; j++)
-            {
-                if (strstr(eric[j].iid, entradas[e]))
-                {
-                    toString(eric[j]);
-                }
-            }
+            toString(resposta[e]);
         }
     }
     for (int i = 0; i < MAXTAM; i++)
@@ -642,4 +639,74 @@ void insertDate(Date *d, char *stringData)
     d->month = atof(month);
     d->year = atof(year);
     d->day = atof(day);
+}
+
+/*Musica *shellsort(Musica *eric, int n)
+{
+    //Musica *pegar = eric;
+    int h = 1;
+
+    do
+    {
+        h = (h * 3) + 1;
+    } while (h < n);
+
+    do
+    {
+        h /= 3;
+        for (int cor = 0; cor < h; cor++)
+        {
+            eric = insercaoPorCor(eric, n, cor, h);
+        }
+    } while (h != 1);
+    return eric;
+}
+
+Musica *insercaoPorCor(Musica *eric, int n, int cor, int h)
+{
+    Musica pegar;
+    for (int i = (h + cor); i < n; i += h)
+    {
+        pegar = eric[i];
+        //strcpy(pegar[0], eric[i]);
+        int j = i - h;
+        while ((j >= 0) && (eric[j].iid > pegar.iid))
+        {
+            eric[j + h] = eric[j];
+            j -= h;
+        }
+        eric[j + h] = pegar;
+        // strcpy(eric[j + h], eric[tmp]);
+    }
+    return eric;
+}*/
+
+Musica *shellsort(Musica *eric, int n)
+{
+    // Start with a big gap, then reduce the gap
+    for (int gap = n / 2; gap > 0; gap /= 2)
+    {
+        // Do a gapped insertion sort for this gap size.
+        // The first gap elements a[0..gap-1] are already in gapped order
+        // keep adding one more element until the entire array is
+        // gap sorted
+        for (int i = gap; i < n; i += 1)
+        {
+            // add a[i] to the elements that have been gap sorted
+            // save a[i] in temp and make a hole at position i
+            Musica pegar = eric[i];
+
+            // shift earlier gap-sorted elements up until the correct
+            // location for a[i] is found
+            int j;
+            for (j = i; j >= gap && eric[j].iid > pegar.iid; j -= gap)
+                //arr[j] = arr[j - gap];
+                eric[j] = eric[j - gap];
+
+            //  put temp (the original a[i]) in its correct location
+            //arr[j] = temp;
+            eric[j] = pegar;
+        }
+    }
+    return eric;
 }
