@@ -1,11 +1,14 @@
 
-
+import java.io.FileWriter;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.*;
+import java.io.BufferedWriter;
+import java.io.File;
 
+// class musica
 class Musica {
 	private String id;
 	private String name;
@@ -25,6 +28,7 @@ class Musica {
 	private double speechiness;
 	private int year;
 
+// set e gets
 	public String getId() {
 		return id;
 	}
@@ -161,6 +165,7 @@ class Musica {
 		this.year = year;
 	}
 
+// contrutor
 	public Musica() {
 		super();
 		this.id = "";
@@ -192,29 +197,35 @@ class Musica {
 
 }
 
+// inicio
 public class OrdeIns {
 	public static void main(String[] args) throws IOException {
+		long tempoInicial = System.currentTimeMillis(); /* saber o tempo de duracao */
 		String linhaArquivo = "";
 		String[] entradaDados = new String[600];
 
 		int variarAloca = 0;
 		BufferedReader conteudoCsv = null;
 		entradaDados[variarAloca] = MyIO.readLine();
+		/* entrada de dados */
 		while (entradaDados[variarAloca].equals("FIM") != true) {
 			variarAloca += 1;
 			entradaDados[variarAloca] = MyIO.readLine();
 
 		}
 		try {
+			/* tentar abrir o arquivo */
 			conteudoCsv = new BufferedReader(new FileReader("/tmp/data.csv"));
 			String[] saidas = new String[variarAloca];
 			int y = 0;
 			linhaArquivo = conteudoCsv.readLine();
+			/* leitura do arquivo */
 			while ((linhaArquivo = conteudoCsv.readLine()) != null) {
 				for (int z = 0; z < variarAloca; z++) {
 
 					if (linhaArquivo.contains(entradaDados[z])) {
-						Musica resposta = extrairMusica(linhaArquivo);
+						Musica resposta = extrairMusica(
+								linhaArquivo); /* pegar so as linhas que foram iguais as entradas */
 						saidas[y] = resposta.toString();
 						y++;
 						// System.out.println(resposta.toString());
@@ -222,7 +233,9 @@ public class OrdeIns {
 				}
 
 			}
-		ordenacaoIns(saidas,y);
+			/* ajustar para fazer o QuicksortParc */
+			ordenacaoIns(saidas, y);
+			wreiterFile(System.currentTimeMillis() - tempoInicial); /* mostrar na pasta log */
 		} catch (IOException e) {
 			System.out.println("Erro :" + e);
 		} finally {
@@ -231,45 +244,58 @@ public class OrdeIns {
 
 	}
 
+	/* escrita na pasta log */
+	public static void wreiterFile(long l) throws IOException {
+		File arquivo = new File("matricula_sequenecial.txt");
+		try {
+			if (!arquivo.exists()) {
+				arquivo.createNewFile();
+			}
+			FileWriter ttt = new FileWriter(arquivo);
+			BufferedWriter escrita = new BufferedWriter(ttt);
+			escrita.write("Matrucula: 694493 " + "Tempo: " + l);
+			escrita.close();
+			ttt.close();
 
-	    public static void ordenacaoIns(String []saidas,int y){
-          String []nomes= new String[y];
-          for(int x=0;x<saidas.length;x+=1){
-            // System.out.println("------"+saidas[x]);
-              nomes[x]=pegarId(saidas[x]);
-          }
-       		String []resultado= insertionSort(nomes);
-       			          
-			for (int p = 0; p < resultado.length; p += 1) {
-				for (int j = 0; j < saidas.length; j += 1) {
-					if (saidas[j].contains(resultado[p])) {
-						System.out.println(saidas[j]);
-					}
+		} catch (Exception e) {
+
+		}
+
+	}
+
+	/* onde preparameos para fazer o ordenacaoSele */
+	public static void ordenacaoIns(String[] saidas, int y) {
+		String[] nomes = new String[y];
+		for (int x = 0; x < saidas.length; x += 1) {
+			// System.out.println("------"+saidas[x]);
+			nomes[x] = pegarId(saidas[x]);
+		}
+		String[] resultado = insertionSort(nomes);
+
+		for (int p = 0; p < resultado.length; p += 1) {
+			for (int j = 0; j < saidas.length; j += 1) {
+				if (saidas[j].contains(resultado[p])) {
+					System.out.println(saidas[j]);
 				}
 			}
-			
-		
-        }
-		 public static String [] insertionSort(String [] ids) {
-    		int j;
-    		String key;
-    		int i;
-	   		 for (j = 1; j < ids.length; j++) {
-    	  		key = ids[j];
-      				for (i = j - 1; (i >= 0) && (ids[i].compareTo(key)>0); i--) {
-       		 			ids[i + 1] = ids[i];
-      				}
-      			ids[i + 1] = key;
-    		}
+		}
+
+	}
+
+	/* Ordenar */
+	public static String[] insertionSort(String[] ids) {
+		int j;
+		String key;
+		int i;
+		for (j = 1; j < ids.length; j++) {
+			key = ids[j];
+			for (i = j - 1; (i >= 0) && (ids[i].compareTo(key) > 0); i--) {
+				ids[i + 1] = ids[i];
+			}
+			ids[i + 1] = key;
+		}
 		return ids;
-  		}
-
-
-
-
-		
-   
-	
+	}
 
 	/* Funcao onde ira alocar todas na class */
 	public static Musica extrairMusica(String linha) {
@@ -331,48 +357,50 @@ public class OrdeIns {
 		}
 
 		return musica;
+	}/* funcao que ira pegar os 3 primeiros valores de cada linha */
+	/* Funcao na qual ira pegar todos os nomes dos artistas */
+
+	public static List<String> pegarNomesArtistar(String linha) {
+		List<String> nomes = new ArrayList<>();
+		char tt = '"';
+		int inicioaSerCortado = linha.indexOf("[");
+		int fimaSerCortado = linha.indexOf("]");
+		String todosNomes = linha.substring(inicioaSerCortado + 1, fimaSerCortado);
+		String[] tirarVirgula = todosNomes.split(",");
+		if (tirarVirgula.length > 1) {
+
+			for (int i = 0; i < tirarVirgula.length; i++) {
+				if (tirarVirgula[i].charAt(1) == tt
+						&& tirarVirgula[i].charAt(2) == tt) {/* teste para verificar se existe erros na linhas */
+
+				}
+			}
+			String[] eric = todosNomes.split("'");
+			for (int k = 0; k < eric.length; k += 1) {
+				if (k % 2 != 0) {
+
+					nomes.add(eric[k]);
+				}
+			}
+
+		} else {
+
+			if (tirarVirgula[0].charAt(0) == tt && tirarVirgula[0].charAt(1) == tt) {
+
+				nomes.add(tirarVirgula[0].substring(2, tirarVirgula[0].length() - 2));
+
+			} else {
+
+				inicioaSerCortado = tirarVirgula[0].indexOf("'");
+				fimaSerCortado = tirarVirgula[0].indexOf("'", inicioaSerCortado + 1);
+				String nome = tirarVirgula[0].substring(inicioaSerCortado + 1, fimaSerCortado);
+				nomes.add(nome);
+			}
+		}
+		return nomes;
 	}
-  public static List<String> pegarNomesArtistar(String linha) {
-    List<String> nomes = new ArrayList<>();
-    char tt = '"';
-    int inicioaSerCortado = linha.indexOf("[");
-    int fimaSerCortado = linha.indexOf("]");
-    String todosNomes = linha.substring(inicioaSerCortado + 1, fimaSerCortado);
-    String[] tirarVirgula = todosNomes.split(",");
-    if (tirarVirgula.length > 1) {
-     
-      for (int i = 0; i < tirarVirgula.length; i++) {
-      if (tirarVirgula[i].charAt(1) == tt && tirarVirgula[i].charAt(2) == tt) {
 
-      } 
-      }
-       String[] eric = todosNomes.split("'");
-          for (int k = 0; k < eric.length; k += 1) {
-            if (k % 2 != 0) {
-
-              nomes.add(eric[k]);
-            }
-          }
-
-
-    } else {
-
-      if (tirarVirgula[0].charAt(0) == tt && tirarVirgula[0].charAt(1) == tt) {
-
-        nomes.add(tirarVirgula[0].substring(2, tirarVirgula[0].length() - 2));
-
-      } else {
-
-        inicioaSerCortado = tirarVirgula[0].indexOf("'");
-        fimaSerCortado = tirarVirgula[0].indexOf("'", inicioaSerCortado + 1);
-        String nome = tirarVirgula[0].substring(inicioaSerCortado + 1, fimaSerCortado);
-        nomes.add(nome);
-      }
-    }
-    return nomes;
-  }
-	
-
+	/* funcao que ira pegar os 3 primeiros valores de cada linha */
 	public static String[] pegarPrimeirosValores(String linha) {
 		int fimaSerCortado = linha.indexOf("[");
 		String retirada = linha.substring(0, fimaSerCortado);
@@ -381,6 +409,10 @@ public class OrdeIns {
 
 	}
 
+	/*
+	 * Funcao que ira abandonar os valores ja alocados e colocar o restante em uma
+	 * string nova
+	 */
 	public static String fazerStringNova(String linha) {
 		int fimaSerCortado = linha.indexOf("]");
 		String retirada = linha.substring(fimaSerCortado);
@@ -390,12 +422,14 @@ public class OrdeIns {
 		return novaString;
 	}
 
+	/* dar split por virgula em todos os valores */
 	public static String[] pegarTodosValores(String linha) {
 		String[] tirarVirgula = linha.split(",");
 
 		return tirarVirgula;
 	}
 
+	/* pegar os nomes das musicas */
 	public static String tirarONome(String linha) {
 		int inicioaSerCortado = linha.indexOf("\"");
 		int fimaSerCortado = linha.indexOf("\"", inicioaSerCortado + 1);
@@ -404,6 +438,7 @@ public class OrdeIns {
 		return retirada;
 	}
 
+	/* funcao na qual ira pegar todos os valores menos os nomes da musicas */
 	public static String[] pegarTudoSemNomes(String linha) {
 		int inicioaSerCortado = linha.indexOf("\"");
 		int fimaSerCortado = linha.indexOf("\"", inicioaSerCortado + 1);
@@ -415,20 +450,23 @@ public class OrdeIns {
 		return tirarVirgula;
 	}
 
-	public static String mudarS(String linha){
-  	String []tt= linha.split("/");
-    String nova="";
-    nova+=tt[2]+"/";
-    nova+=tt[1]+"/";
-    nova+=tt[0];
-	return nova;
+	/* funcao para colocar no formato data */
+	public static String mudarS(String linha) {
+		String[] tt = linha.split("/");
+		String nova = "";
+		nova += tt[2] + "/";
+		nova += tt[1] + "/";
+		nova += tt[0];
+		return nova;
 
 	}
-	 public static String pegarId(String linha) {
 
-    	int fimaSerCortado = linha.indexOf("#");
-    	String idCom = linha.substring(0, fimaSerCortado - 1);
-   	 return idCom;
-  	}
+	/* localizar onde estar os nomes para seram */
+	public static String pegarId(String linha) {
+
+		int fimaSerCortado = linha.indexOf("#");
+		String idCom = linha.substring(0, fimaSerCortado - 1);
+		return idCom;
+	}
 
 }
