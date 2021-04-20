@@ -1,10 +1,12 @@
+import java.io.FileWriter;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.*;
-import java.time.LocalDate;
-
+import java.io.BufferedWriter;
+import java.io.File;
+// class musica
 class Musica {
 private String id;
 private String name;
@@ -24,6 +26,7 @@ private double loudness;
 private double speechiness;
 private int year;
 
+// set e gets
 public String getId() {
         return id;
 }
@@ -159,7 +162,7 @@ public int getYear() {
 public void setYear(int year) {
         this.year = year;
 }
-
+// contrutor//inicio
 public Musica() {
         super();
         this.id = "";
@@ -190,9 +193,10 @@ public String toString() {
 }
 
 }
-
+//inicio
 public class Headpsot {
 public static void main(String[] args) throws IOException {
+  	   long tempoInicial = System.currentTimeMillis(); /* saber o tempo de duracao */
         String linhaArquivo = "";
         String[] entradaDados = new String[600];
 
@@ -205,6 +209,7 @@ public static void main(String[] args) throws IOException {
 
         }
         try {
+                		/* tentar abrir o arquivo */
                 conteudoCsv = new BufferedReader(new FileReader("/tmp/data.csv"));
                 String[] saidas = new String[variarAloca];
                 int y = 0;
@@ -212,7 +217,7 @@ public static void main(String[] args) throws IOException {
                 while ((linhaArquivo = conteudoCsv.readLine()) != null) {
                         for (int z = 0; z < variarAloca; z++) {
 
-                                if (linhaArquivo.contains(entradaDados[z])) {
+                                if (linhaArquivo.contains(entradaDados[z])) {/* pegar so as linhas que foram iguais as entradas */
                                         Musica resposta = extrairMusica(linhaArquivo);
                                         saidas[y] = resposta.toString();
                                         y++;
@@ -221,7 +226,9 @@ public static void main(String[] args) throws IOException {
                         }
 
                 }
+                	/* ajustar para fazer o Heap */
                 heapFazer(saidas);
+                wreiterFile(System.currentTimeMillis() - tempoInicial); /* mostrar na pasta log */
         } catch (IOException e) {
                 System.out.println("Erro :" + e);
         } finally {
@@ -229,8 +236,27 @@ public static void main(String[] args) throws IOException {
         }
 
 }
+/* escrita na pasta log */
+public static void wreiterFile(long l) throws IOException {
+  File arquivo = new File("matricula_sequenecial.txt");
+  try {
+    if (!arquivo.exists()) {
+      arquivo.createNewFile();
+    }
+    FileWriter ttt = new FileWriter(arquivo);
+    BufferedWriter escrita = new BufferedWriter(ttt);
+    escrita.write("Matrucula: 694493 " + "Tempo: " + l);
+    escrita.close();
+    ttt.close();
+
+  } catch (Exception e) {
+
+  }
+
+}
 public static String[] pegarLocalDate;
 
+/* onde preparameos para fazer o Heap */
 public static void heapFazer(String[] saidas) {
         String[] pato = new String[saidas.length];
         for (int i = 0; i < saidas.length; i++) {
@@ -242,6 +268,7 @@ public static void heapFazer(String[] saidas) {
         for (int i = 0; i < pato.length; i++) {
                 // System.out.println(pato[i]);
                 pegarLocalDate[i] = refazerData(pato[i]);
+                	/* Funcao na qual ira pegar todos os nomes dos artistas */
                 //System.out.println(pegarLocalDate[i]);
 
         }
@@ -326,6 +353,7 @@ public static Musica extrairMusica(String linha) {
 
         return musica;
 }
+	/* Funcao na qual ira pegar todos os nomes dos artistas */
 public static List < String > pegarNomesArtistar(String linha) {
         List < String > nomes = new ArrayList < > ();
         char tt = '"';
@@ -366,7 +394,7 @@ public static List < String > pegarNomesArtistar(String linha) {
         return nomes;
 }
 
-
+	/* funcao que ira pegar os 3 primeiros valores de cada linha */
 public static String[] pegarPrimeirosValores(String linha) {
         int fimaSerCortado = linha.indexOf("[");
         String retirada = linha.substring(0, fimaSerCortado);
@@ -374,7 +402,10 @@ public static String[] pegarPrimeirosValores(String linha) {
         return tirarVirgula;
 
 }
-
+/*
+ * Funcao que ira abandonar os valores ja alocados e colocar o restante em uma
+ * string nova
+ */
 public static String fazerStringNova(String linha) {
         int fimaSerCortado = linha.indexOf("]");
         String retirada = linha.substring(fimaSerCortado);
@@ -383,13 +414,13 @@ public static String fazerStringNova(String linha) {
 
         return novaString;
 }
-
+/* dar split por virgula em todos os valores */
 public static String[] pegarTodosValores(String linha) {
         String[] tirarVirgula = linha.split(",");
 
         return tirarVirgula;
 }
-
+	/* pegar os nomes das musicas */
 public static String tirarONome(String linha) {
         int inicioaSerCortado = linha.indexOf("\"");
         int fimaSerCortado = linha.indexOf("\"", inicioaSerCortado + 1);
@@ -397,7 +428,7 @@ public static String tirarONome(String linha) {
 
         return retirada;
 }
-
+	/* funcao na qual ira pegar todos os valores menos os nomes da musicas */
 public static String[] pegarTudoSemNomes(String linha) {
         int inicioaSerCortado = linha.indexOf("\"");
         int fimaSerCortado = linha.indexOf("\"", inicioaSerCortado + 1);

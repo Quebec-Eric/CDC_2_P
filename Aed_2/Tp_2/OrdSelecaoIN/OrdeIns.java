@@ -224,8 +224,7 @@ public class OrdeIns {
 				for (int z = 0; z < variarAloca; z++) {
 
 					if (linhaArquivo.contains(entradaDados[z])) {
-						Musica resposta = extrairMusica(
-								linhaArquivo); /* pegar so as linhas que foram iguais as entradas */
+						Musica resposta = extrairMusica(	linhaArquivo); /* pegar so as linhas que foram iguais as entradas */
 						saidas[y] = resposta.toString();
 						y++;
 						// System.out.println(resposta.toString());
