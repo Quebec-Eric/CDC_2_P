@@ -72,7 +72,7 @@ int main()
     } while (strncmp(entradas[variacaoENtradas++], "FIM", 3) != 0 && variacaoENtradas < MAXTAM);
 
     FILE *arquivo = fopen("/tmp/data.csv", "r");
-
+//as
     if (arquivo != NULL)
     {
         char readFile[1000];
