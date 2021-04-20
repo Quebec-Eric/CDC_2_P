@@ -1,11 +1,14 @@
 
-
+import java.io.FileWriter;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.*;
+import java.io.BufferedWriter;
+import java.io.File;
 
+// class musica
 class Musica {
 private String id;
 private String name;
@@ -24,7 +27,7 @@ private double liveness;
 private double loudness;
 private double speechiness;
 private int year;
-
+// set e gets
 public String getId() {
         return id;
 }
@@ -160,7 +163,7 @@ public int getYear() {
 public void setYear(int year) {
         this.year = year;
 }
-
+// contrutor
 public Musica() {
         super();
         this.id = "";
@@ -191,38 +194,44 @@ public String toString() {
 }
 
 }
-
+// inicio
 public class QuicksortParc {
 public static void main(String[] args) throws IOException {
+        long tempoInicial = System.currentTimeMillis(); /* saber o tempo de duracao*/
         String linhaArquivo = "";
         String[] entradaDados = new String[600];
 
         int variarAloca = 0;
         BufferedReader conteudoCsv = null;
         entradaDados[variarAloca] = MyIO.readLine();
+        /*entrada de dados*/
         while (entradaDados[variarAloca].equals("FIM") != true) {
                 variarAloca += 1;
                 entradaDados[variarAloca] = MyIO.readLine();
 
         }
         try {
+                /*tentar abrir o arquivo*/
                 conteudoCsv = new BufferedReader(new FileReader("/tmp/data.csv"));
                 String[] saidas = new String[variarAloca];
                 int y = 0;
                 linhaArquivo = conteudoCsv.readLine();
                 Musica [] resposta1 = new Musica[variarAloca];
+                /*leitura do arquivo*/
                 while ((linhaArquivo = conteudoCsv.readLine()) != null) {
                         for (int z = 0; z < variarAloca; z++) {
 
-                                if (linhaArquivo.contains(entradaDados[z])) {
-                                        resposta1 [z] = extrairMusica(linhaArquivo);
+                                if (linhaArquivo.contains(entradaDados[z])) { /* pegar so as linhas que foram iguais as entradas*/
+                                        resposta1 [z] = extrairMusica(linhaArquivo); /* receber na class as respostas de todas fazendo um array de Class*/
 
-                                        // System.out.println(resposta.toString());
+
                                 }
                         }
 
                 }
-                ajustarParaOCoun(resposta1);
+
+                ajustarParaOCoun(resposta1); /* ajustar para fazer o QuicksortParc*/
+                wreiterFile(System.currentTimeMillis() - tempoInicial);   /* mostrar na pasta log*/
 
         } catch (IOException e) {
                 System.out.println("Erro :" + e);
@@ -231,19 +240,40 @@ public static void main(String[] args) throws IOException {
         }
 
 }
+/*escrita na pasta log*/
+public static void wreiterFile(long l) throws IOException {
+        File arquivo = new File("matricula_sequenecial.txt");
+        try {
+                if (!arquivo.exists()) {
+                        arquivo.createNewFile();
+                }
+                FileWriter ttt = new FileWriter(arquivo);
+                BufferedWriter escrita = new BufferedWriter(ttt);
+                escrita.write("Matrucula: 694493 " + "Tempo: " + l );
+                escrita.close();
+                ttt.close();
+
+        } catch (Exception e) {
+
+        }
+
+}
+/* fim da escrita*/
+
+/* onde preparameos para fazer o QuicksortParc */
 public static void ajustarParaOCoun(Musica [] resposta){
 
         int k=10;
-        //resposta= verificar( resposta);
-        resposta=quicksort(resposta,0,10);
+
+        resposta=quicksort(resposta,0,resposta.length-1);  /* mandar para a funcao*/
 
         for (int i =0; i<k; i++ ) {
-                System.out.println(resposta[i].toString());
+                System.out.println(resposta[i].toString()); /* mostrar na tela*/
         }
 }
 
 
-
+/*funcao para comparar os nomes , para ser o indice final na ordenacao*/
 public static Musica[] verificar(Musica [] resposta){
         Musica ordenado =new Musica();
         for (int i = (resposta.length- 1); i > 0; i--) {
@@ -255,9 +285,10 @@ public static Musica[] verificar(Musica [] resposta){
         }
         return resposta;
 }
+/* inicio quicksort*/
 public static Musica [] quicksort(Musica [] resposta,int esq, int dir)
 {
-       int i = esq, j = dir;
+        int i = esq, j = dir;
         if(dir-esq>0)
         {
 
@@ -276,7 +307,7 @@ public static Musica [] quicksort(Musica [] resposta,int esq, int dir)
         }
         return resposta;
 }
-
+/* mudar A Class para outra*/
 public static void swap(Musica [] resposta,int i, int j) {
         Musica t = resposta[i];
         resposta[i] = resposta[j];
@@ -347,10 +378,11 @@ public static Musica extrairMusica(String linha) {
 
         return musica;
 }
+/* Funcao na qual ira pegar todos os nomes dos artistas*/
 public static List<String> pegarNomesArtistar(String linha) {
         List<String> nomes = new ArrayList<>();
         char tt = '"';
-        int inicioaSerCortado = linha.indexOf("[");
+        int inicioaSerCortado = linha.indexOf("[");/* achar primeira local */
         int fimaSerCortado = linha.indexOf("]");
         String todosNomes = linha.substring(inicioaSerCortado + 1, fimaSerCortado);
         String[] tirarVirgula = todosNomes.split(",");
@@ -372,7 +404,7 @@ public static List<String> pegarNomesArtistar(String linha) {
 
         } else {
 
-                if (tirarVirgula[0].charAt(0) == tt && tirarVirgula[0].charAt(1) == tt) {
+                if (tirarVirgula[0].charAt(0) == tt && tirarVirgula[0].charAt(1) == tt) {/* teste para verificar se existe erros na linhas*/
 
                         nomes.add(tirarVirgula[0].substring(2, tirarVirgula[0].length() - 2));
 
@@ -387,7 +419,7 @@ public static List<String> pegarNomesArtistar(String linha) {
         return nomes;
 }
 
-
+/* funcao que ira pegar os 3 primeiros valores de cada linha */
 public static String[] pegarPrimeirosValores(String linha) {
         int fimaSerCortado = linha.indexOf("[");
         String retirada = linha.substring(0, fimaSerCortado);
@@ -395,7 +427,7 @@ public static String[] pegarPrimeirosValores(String linha) {
         return tirarVirgula;
 
 }
-
+/* Funcao que ira abandonar os valores ja alocados e colocar o restante em uma string nova*/
 public static String fazerStringNova(String linha) {
         int fimaSerCortado = linha.indexOf("]");
         String retirada = linha.substring(fimaSerCortado);
@@ -404,13 +436,13 @@ public static String fazerStringNova(String linha) {
 
         return novaString;
 }
-
+/* dar split por virgula em todos os valores*/
 public static String[] pegarTodosValores(String linha) {
         String[] tirarVirgula = linha.split(",");
 
         return tirarVirgula;
 }
-
+/* pegar os nomes das musicas */
 public static String tirarONome(String linha) {
         int inicioaSerCortado = linha.indexOf("\"");
         int fimaSerCortado = linha.indexOf("\"", inicioaSerCortado + 1);
@@ -418,7 +450,7 @@ public static String tirarONome(String linha) {
 
         return retirada;
 }
-
+/* funcao na qual ira pegar todos os valores menos os nomes da musicas */
 public static String[] pegarTudoSemNomes(String linha) {
         int inicioaSerCortado = linha.indexOf("\"");
         int fimaSerCortado = linha.indexOf("\"", inicioaSerCortado + 1);
@@ -429,7 +461,7 @@ public static String[] pegarTudoSemNomes(String linha) {
 
         return tirarVirgula;
 }
-
+/* funcao para colocar no formato data */
 public static String mudarS(String linha){
         String [] tt= linha.split("/");
         String nova="";
