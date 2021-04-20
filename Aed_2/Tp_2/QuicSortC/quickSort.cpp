@@ -57,10 +57,8 @@ double handle_percentage(double value);
 char *processData(char *dado);
 char *newString(char *oldString, int oldTamanho);
 Musica colocarTudoClass(char *readFile, Musica eric);
-Musica *shellsort(Musica *eric, int n);
-Musica *shellsort(Musica *eric, int n);
-void insercaoPorCor(Musica *eric, int n, int cor, int h);
-
+Musica *quicksortRec(Musica *eric, int esq, int dir);
+void swap(Musica *eric, int i, int j);
 int main()
 {
     char *entradas[MAXTAM];
@@ -105,8 +103,9 @@ int main()
                 }
             }
         }
-
-        pegar = shellsort(pegar, variacaoENtradas);
+     //printf("ola");
+        pegar = quicksortRec(pegar, 0, m);
+       // printf("ola");
         for (int e = 1; e < variacaoENtradas; e++)
         {
             toString(pegar[e]);
@@ -447,38 +446,33 @@ void insertDate(Date *d, char *stringData)
     d->day = atof(day);
 }
 
-void insercaoPorCor(Musica *eric, int n, int cor, int h)
+Musica *quicksortRec(Musica *eric, int esq, int dir)
 {
-    for (int i = (h + cor); i < n; i += h)
+    int i = esq, j = dir;
+    Musica pivo = eric[(dir + esq) / 2];
+    while (i <= j)
     {
-        Musica tmp = eric[i];
-        int j = i - h;
-        while ((j >= 0) && strcmp(eric[j].iid, tmp.iid) > 0)
+        while (eric[i].duration_ms < pivo.duration_ms)
+            i++;
+        while (eric[j].duration_ms > pivo.duration_ms)
+            j--;
+        if (i <= j)
         {
-            eric[j + h] = eric[j];
-            j -= h;
+            swap(eric, i, j);
+            i++;
+            j--;
         }
-        eric[j + h] = tmp;
     }
-}
-
-Musica *shellsort(Musica *eric, int n)
-{
-    int h = 1;
-
-    do
-    {
-        h = (h * 3) + 1;
-    } while (h < n);
-
-    do
-    {
-        h /= 3;
-        for (int cor = 0; cor < h; cor++)
-        {
-            insercaoPorCor(eric, n, cor, h);
-        }
-    } while (h != 1);
+    if (esq < j)
+        quicksortRec(eric, esq, j);
+    if (i < dir)
+        quicksortRec(eric, i, dir);
 
     return eric;
+}
+void swap(Musica *eric, int i, int j)
+{
+    Musica a = eric[i];
+    eric[i] = eric[j];
+    eric[j] = a;
 }

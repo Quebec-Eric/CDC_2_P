@@ -57,10 +57,9 @@ double handle_percentage(double value);
 char *processData(char *dado);
 char *newString(char *oldString, int oldTamanho);
 Musica colocarTudoClass(char *readFile, Musica eric);
-Musica *shellsort(Musica *eric, int n);
-Musica *shellsort(Musica *eric, int n);
-void insercaoPorCor(Musica *eric, int n, int cor, int h);
-
+Musica *quicksortRec(Musica *eric, int esq, int dir);
+void swap(Musica *eric, int i, int j);
+Musica *bolha(Musica *eric, int n);
 int main()
 {
     char *entradas[MAXTAM];
@@ -73,7 +72,7 @@ int main()
         scanf("%s", entradas[variacaoENtradas]);
     } while (strncmp(entradas[variacaoENtradas++], "FIM", 3) != 0 && variacaoENtradas < MAXTAM);
 
-    FILE *arquivo = fopen("/tmp/data.csv", "r");
+    FILE *arquivo = fopen("data.csv", "r");
 
     if (arquivo != NULL)
     {
@@ -105,8 +104,10 @@ int main()
                 }
             }
         }
-
-        pegar = shellsort(pegar, variacaoENtradas);
+        //printf("ola");
+        //pegar = quicksortRec(pegar, 0, m);
+        pegar = bolha(pegar, m);
+        // printf("ola");
         for (int e = 1; e < variacaoENtradas; e++)
         {
             toString(pegar[e]);
@@ -447,38 +448,24 @@ void insertDate(Date *d, char *stringData)
     d->day = atof(day);
 }
 
-void insercaoPorCor(Musica *eric, int n, int cor, int h)
+
+Musica *bolha(Musica *eric, int n)
 {
-    for (int i = (h + cor); i < n; i += h)
+    int i, j;
+    for (i = (n - 1); i > 0; i--)
     {
-        Musica tmp = eric[i];
-        int j = i - h;
-        while ((j >= 0) && strcmp(eric[j].iid, tmp.iid) > 0)
+        for (j = 0; j < i; j++)
         {
-            eric[j + h] = eric[j];
-            j -= h;
+            if (eric[j].duration_ms > eric[j + 1].duration_ms)
+            {
+                swap(eric, j, j + 1);
+            }
         }
-        eric[j + h] = tmp;
     }
 }
-
-Musica *shellsort(Musica *eric, int n)
+void swap(Musica *eric, int i, int j)
 {
-    int h = 1;
-
-    do
-    {
-        h = (h * 3) + 1;
-    } while (h < n);
-
-    do
-    {
-        h /= 3;
-        for (int cor = 0; cor < h; cor++)
-        {
-            insercaoPorCor(eric, n, cor, h);
-        }
-    } while (h != 1);
-
-    return eric;
+    Musica a = eric[i];
+    eric[i] = eric[j];
+    eric[j] = a;
 }

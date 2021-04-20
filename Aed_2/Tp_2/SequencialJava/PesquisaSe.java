@@ -48,7 +48,7 @@ public class PesquisaSe {
 
 	}
 
-	public static void wreiterFile(long l, int numeroComparacoes) throws IOException {
+	public static void wreiterFile(long l) throws IOException {
 		File arquivo = new File("matricula_sequenecial.txt");
 		try {
 			if (!arquivo.exists()) {
