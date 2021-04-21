@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #define MAXTAM 400
 typedef struct
 {
@@ -54,15 +55,16 @@ Musica fazerTudo(char *readFile, int lengthReadFile);
 void insertDate(Date *d, char *stringData);
 void displayFormattedDate(Date *d);
 double handle_percentage(double value);
-char *processData(char *dado);
+char *fazerCerto(char *pato);
 char *newString(char *oldString, int oldTamanho);
 Musica colocarTudoClass(char *readFile, Musica eric);
 Musica *shellsort(Musica *eric, int n);
 Musica *shellsort(Musica *eric, int n);
 void insercaoPorCor(Musica *eric, int n, int cor, int h);
+void escritaNoarquivo(double eric);
 
 int main()
-{
+{    clock_t begin = clock();
     char *entradas[MAXTAM];
     for (int i = 0; i < MAXTAM; i++)
         entradas[i] = (char *)calloc(100, sizeof(char));
@@ -113,12 +115,16 @@ int main()
         }
         free(pegar);
         free(eric);
+        clock_t end = clock();
+        double time_spent = (double)(end - begin);
+        escritaNoarquivo(time_spent);
     }
     for (int i = 0; i < MAXTAM; i++)
     {
         free(entradas[i]);
     }
 }
+//pegar os artistas
 Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
 {
     int testar = 0;
@@ -147,6 +153,7 @@ Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
     //printf("============%s\n",music.artistis);
     return music;
 }
+//pegar as primeiras informacoes
 Musica get3Information(char *readFile, Musica music, int lenghtReadFile)
 {
     int fritPosition = caracterPosition('[', readFile, lenghtReadFile);
@@ -183,24 +190,25 @@ Musica get3Information(char *readFile, Musica music, int lenghtReadFile)
 
     return music;
 }
-char *processData(char *dado)
+// colocar um ; no local correto
+char *fazerCerto(char *pato)
 {
-    char *dado_tratado = (char *)calloc(1000, sizeof(char));
+    char *novaString = (char *)calloc(1000, sizeof(char));
     int j = 0;
 
-    for (int i = 0; i < strlen(dado); i++)
+    for (int i = 0; i < strlen(pato); i++)
     {
-        if (dado[i] == '\"')
+        if (pato[i] == '\"')
         {
             i++;
 
-            if (dado[i] == '[')
+            if (pato[i] == '[')
             {
-                while (dado[i] != '\"')
+                while (pato[i] != '\"')
                 {
-                    if (dado[i] != '\'')
+                    if (pato[i] != '\'')
                     {
-                        dado_tratado[j] = dado[i];
+                        novaString[j] = pato[i];
                         j++;
                     }
 
@@ -209,51 +217,51 @@ char *processData(char *dado)
             }
             else
             {
-                while (dado[i] != '\"')
+                while (pato[i] != '\"')
                 {
-                    dado_tratado[j] = dado[i];
+                    novaString[j] = pato[i];
                     j++;
                     i++;
                 }
             }
         }
-        else if (dado[i] == '[')
+        else if (pato[i] == '[')
         {
-            while (dado[i] != ']')
+            while (pato[i] != ']')
             {
-                if (dado[i] != '\'')
+                if (pato[i] != '\'')
                 {
-                    dado_tratado[j] = dado[i];
+                    novaString[j] = pato[i];
                     j++;
                 }
 
                 i++;
             }
 
-            dado_tratado[j] = dado[i];
+            novaString[j] = pato[i];
             j++;
         }
-        else if (dado[i] == ',')
+        else if (pato[i] == ',')
         {
-            dado_tratado[j] = ';';
+            novaString[j] = ';';
             j++;
         }
         else
         {
-            dado_tratado[j] = dado[i];
+            novaString[j] = pato[i];
             j++;
         }
     }
 
-    return dado_tratado;
+    return novaString;
 }
-
+//fazertudo
 Musica fazerTudo(char *readFile, int lengthReadFile)
 {
     Musica eric;
     char *pegar;
 
-    readFile = processData(readFile);
+    readFile = fazerCerto(readFile);
     eric = getArtistis(readFile, eric, lengthReadFile);
     eric = get3Information(readFile, eric, lengthReadFile);
     readFile = newString(readFile, lengthReadFile);
@@ -262,7 +270,7 @@ Musica fazerTudo(char *readFile, int lengthReadFile)
 
     return eric;
 }
-
+//colocar tudo na class
 Musica colocarTudoClass(char *readFile, Musica eric)
 {
     char *piece;
@@ -354,7 +362,7 @@ Musica colocarTudoClass(char *readFile, Musica eric)
 
     return eric;
 }
-
+//fazer uma nova string
 char *newString(char *oldString, int oldTamanho)
 {
     int ondeCortar = caracterPosition(']', oldString, oldTamanho);
@@ -374,7 +382,7 @@ char *newString(char *oldString, int oldTamanho)
     // printf("%s\n", oldString);
     return resposta;
 }
-
+// pegar a posicao do caracter
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile)
 {
     int positionC = 0;
@@ -395,7 +403,7 @@ double handle_percentage(double value)
 {
     return ceil(value) == value ? value / 100 : value;
 }
-
+//imprimir
 void toString(Musica music)
 {
 
@@ -412,7 +420,7 @@ void displayFormattedDate(Date *d)
 {
     printf("%0*d/%0*d/%0*d", 2, d->day, 2, d->month, 4, d->year);
 }
-//s
+//fazer a data
 void insertDate(Date *d, char *stringData)
 {
     char day[3];
@@ -446,7 +454,7 @@ void insertDate(Date *d, char *stringData)
     d->year = atof(year);
     d->day = atof(day);
 }
-
+//pegar id
 void insercaoPorCor(Musica *eric, int n, int cor, int h)
 {
     for (int i = (h + cor); i < n; i += h)
@@ -461,7 +469,7 @@ void insercaoPorCor(Musica *eric, int n, int cor, int h)
         eric[j + h] = tmp;
     }
 }
-
+//shellsort
 Musica *shellsort(Musica *eric, int n)
 {
     int h = 1;
@@ -481,4 +489,20 @@ Musica *shellsort(Musica *eric, int n)
     } while (h != 1);
 
     return eric;
+}
+//arquivo
+void escritaNoarquivo(double eric)
+{
+
+    char *matricula = {"Matrucula: 694493"};
+    FILE *pont_arq = fopen("694493_ShellShort.txt", "w");
+    if (pont_arq == NULL)
+    {
+        printf("Erro na abertura do arquivo!");
+    }
+    else
+    {
+        fprintf(pont_arq, "Matricula== %s  ", matricula);
+        fprintf(pont_arq, " Tempo== %lf", eric);
+    }
 }
