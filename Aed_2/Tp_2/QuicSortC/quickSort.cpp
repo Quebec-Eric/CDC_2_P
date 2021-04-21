@@ -3,14 +3,16 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #define MAXTAM 400
+//Struct da data
 typedef struct
 {
     int day;
     int month;
     int year;
 } Date;
-
+//Struct Musica
 typedef struct
 {
     char iid[30];
@@ -32,13 +34,13 @@ typedef struct
     double speechiness;
     int year;
 } Musica;
-
+//Musica clone
 Musica Clone_music(Musica music)
 {
 
     return music;
 }
-
+//Funcoes
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile);
 Musica getArtistis(char *readFile, Musica music, int lenghtReadFile);
 Musica get3Information(char *readFile, Musica music, int lenghtReadFile);
@@ -54,30 +56,35 @@ Musica fazerTudo(char *readFile, int lengthReadFile);
 void insertDate(Date *d, char *stringData);
 void displayFormattedDate(Date *d);
 double handle_percentage(double value);
-char *processData(char *dado);
+char *fazerCerto(char *pato);
 char *newString(char *oldString, int oldTamanho);
 Musica colocarTudoClass(char *readFile, Musica eric);
 Musica *quicksortRec(Musica *eric, int esq, int dir);
 void swap(Musica *eric, int i, int j);
+void escritaNoarquivo(double eric);
+
+//inicio
 int main()
 {
+    clock_t begin = clock();
     char *entradas[MAXTAM];
+    //alocar entrada
     for (int i = 0; i < MAXTAM; i++)
         entradas[i] = (char *)calloc(100, sizeof(char));
 
     int variacaoENtradas = 0;
     do
-    {
+    { //receber entrada
         scanf("%s", entradas[variacaoENtradas]);
     } while (strncmp(entradas[variacaoENtradas++], "FIM", 3) != 0 && variacaoENtradas < MAXTAM);
 
     FILE *arquivo = fopen("/tmp/data.csv", "r");
-//as
+    //abertura do arquivo
     if (arquivo != NULL)
     {
         char readFile[1000];
         int ghj = 0;
-
+        //alocacao das musicas
         Musica *eric = (Musica *)malloc(170625 * sizeof(Musica));
         Musica *pegar = (Musica *)malloc(variacaoENtradas * sizeof(Musica));
         fgets(readFile, sizeof(readFile), arquivo);
@@ -85,7 +92,7 @@ int main()
         {
 
             int lengthReadFile = sizeof(readFile) - 1;
-
+            // receber a class Musica
             eric[ghj] = fazerTudo(readFile, lengthReadFile);
 
             ghj++;
@@ -96,6 +103,7 @@ int main()
             for (int j = 0; j < ghj; j++)
             {
                 // printf("%s\n",eric[ghj].iid);
+                // pegar so as que forem iguais as entradas
                 if (strcmp(eric[j].iid, entradas[e]) == 0)
                 {
                     pegar[m] = eric[j];
@@ -103,21 +111,29 @@ int main()
                 }
             }
         }
-     //printf("ola");
+        //printf("ola");
+        // fazer o quicSort
         pegar = quicksortRec(pegar, 0, m);
-       // printf("ola");
+        // printf("ola");
+        // imprimir
         for (int e = 1; e < variacaoENtradas; e++)
         {
             toString(pegar[e]);
         }
         free(pegar);
         free(eric);
+        // pegar o tempo de exec
+        clock_t end = clock();
+        double time_spent = (double)(end - begin);
+        escritaNoarquivo(time_spent);
     }
     for (int i = 0; i < MAXTAM; i++)
     {
         free(entradas[i]);
     }
 }
+
+//pegar os artistas
 Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
 {
     int testar = 0;
@@ -146,6 +162,7 @@ Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
     //printf("============%s\n",music.artistis);
     return music;
 }
+//pegar as 3 primeiras informacoes
 Musica get3Information(char *readFile, Musica music, int lenghtReadFile)
 {
     int fritPosition = caracterPosition('[', readFile, lenghtReadFile);
@@ -182,24 +199,25 @@ Musica get3Information(char *readFile, Musica music, int lenghtReadFile)
 
     return music;
 }
-char *processData(char *dado)
+//colocar um ; no local correto
+char *fazerCerto(char *pato)
 {
-    char *dado_tratado = (char *)calloc(1000, sizeof(char));
+    char *novaString = (char *)calloc(1000, sizeof(char));
     int j = 0;
 
-    for (int i = 0; i < strlen(dado); i++)
+    for (int i = 0; i < strlen(pato); i++)
     {
-        if (dado[i] == '\"')
+        if (pato[i] == '\"')
         {
             i++;
 
-            if (dado[i] == '[')
+            if (pato[i] == '[')
             {
-                while (dado[i] != '\"')
+                while (pato[i] != '\"')
                 {
-                    if (dado[i] != '\'')
+                    if (pato[i] != '\'')
                     {
-                        dado_tratado[j] = dado[i];
+                        novaString[j] = pato[i];
                         j++;
                     }
 
@@ -208,51 +226,51 @@ char *processData(char *dado)
             }
             else
             {
-                while (dado[i] != '\"')
+                while (pato[i] != '\"')
                 {
-                    dado_tratado[j] = dado[i];
+                    novaString[j] = pato[i];
                     j++;
                     i++;
                 }
             }
         }
-        else if (dado[i] == '[')
+        else if (pato[i] == '[')
         {
-            while (dado[i] != ']')
+            while (pato[i] != ']')
             {
-                if (dado[i] != '\'')
+                if (pato[i] != '\'')
                 {
-                    dado_tratado[j] = dado[i];
+                    novaString[j] = pato[i];
                     j++;
                 }
 
                 i++;
             }
 
-            dado_tratado[j] = dado[i];
+            novaString[j] = pato[i];
             j++;
         }
-        else if (dado[i] == ',')
+        else if (pato[i] == ',')
         {
-            dado_tratado[j] = ';';
+            novaString[j] = ';';
             j++;
         }
         else
         {
-            dado_tratado[j] = dado[i];
+            novaString[j] = pato[i];
             j++;
         }
     }
 
-    return dado_tratado;
+    return novaString;
 }
-
+    // funcao que ira fazer todo o programa 
 Musica fazerTudo(char *readFile, int lengthReadFile)
 {
     Musica eric;
     char *pegar;
 
-    readFile = processData(readFile);
+    readFile = fazerCerto(readFile);
     eric = getArtistis(readFile, eric, lengthReadFile);
     eric = get3Information(readFile, eric, lengthReadFile);
     readFile = newString(readFile, lengthReadFile);
@@ -261,7 +279,7 @@ Musica fazerTudo(char *readFile, int lengthReadFile)
 
     return eric;
 }
-
+// funcao na qual ira colocar tudo na class
 Musica colocarTudoClass(char *readFile, Musica eric)
 {
     char *piece;
@@ -353,7 +371,7 @@ Musica colocarTudoClass(char *readFile, Musica eric)
 
     return eric;
 }
-
+// fazer uma nova string sem lixo
 char *newString(char *oldString, int oldTamanho)
 {
     int ondeCortar = caracterPosition(']', oldString, oldTamanho);
@@ -373,7 +391,7 @@ char *newString(char *oldString, int oldTamanho)
     // printf("%s\n", oldString);
     return resposta;
 }
-
+// saber onde esta o caracter recebido
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile)
 {
     int positionC = 0;
@@ -394,7 +412,7 @@ double handle_percentage(double value)
 {
     return ceil(value) == value ? value / 100 : value;
 }
-
+//imprimir
 void toString(Musica music)
 {
 
@@ -406,12 +424,12 @@ void toString(Musica music)
     printf("## %s ## %G ## %s ## %d\n", music.loudness, music.speechiness, music.energy, music.duration_ms);
     // printf("----------------------------------------------------------------------------------------- ## \n");
 }
-
+//fazer data
 void displayFormattedDate(Date *d)
 {
     printf("%0*d/%0*d/%0*d", 2, d->day, 2, d->month, 4, d->year);
 }
-//s
+//colocar a data
 void insertDate(Date *d, char *stringData)
 {
     char day[3];
@@ -445,7 +463,7 @@ void insertDate(Date *d, char *stringData)
     d->year = atof(year);
     d->day = atof(day);
 }
-
+//quiksort
 Musica *quicksortRec(Musica *eric, int esq, int dir)
 {
     int i = esq, j = dir;
@@ -475,4 +493,20 @@ void swap(Musica *eric, int i, int j)
     Musica a = eric[i];
     eric[i] = eric[j];
     eric[j] = a;
+}
+//arquivo
+void escritaNoarquivo(double eric)
+{
+
+    char *matricula = {"Matrucula: 694493"};
+    FILE *pont_arq = fopen("694493_quicksort.txt", "w");
+    if (pont_arq == NULL)
+    {
+        printf("Erro na abertura do arquivo!");
+    }
+    else
+    {
+        fprintf(pont_arq, "Matricula== %s  ", matricula);
+        fprintf(pont_arq, " Tempo== %lf", eric);
+    }
 }
