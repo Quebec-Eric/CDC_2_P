@@ -1,3 +1,8 @@
+/************* *****************
+*   Eric Azevedo de Oliveira  * 
+*   Aluno da Puc              *  
+*   2 periodo                 *  
+*******************************/
 
 
 import java.util.*;

@@ -1,3 +1,9 @@
+/************ ******************
+*   Eric Azevedo de Oliveira  * 
+*   Aluno da Puc              *  
+*   2 periodo                 *  
+*******************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

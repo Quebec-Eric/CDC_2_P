@@ -1,9 +1,8 @@
-/************   ******************
+/***** *************************
 *   Eric Azevedo de Oliveira  * 
 *   Aluno da Puc              *  
 *   2 periodo                 *  
 *******************************/
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,6 +63,8 @@ double handle_percentage(double value);
 char *processData(char *dado);
 char *newString(char *oldString, int oldTamanho);
 Musica colocarTudoClass(char *readFile, Musica eric);
+Musica *quicksortRec(Musica *eric, int esq, int dir);
+void swap(Musica *eric, int i, int j);
 
 int main()
 {
@@ -85,6 +86,7 @@ int main()
         int ghj = 0;
 
         Musica *eric = (Musica *)malloc(170625 * sizeof(Musica));
+        Musica *pegar = (Musica *)malloc(variacaoENtradas * sizeof(Musica));
         fgets(readFile, sizeof(readFile), arquivo);
         while (fgets(readFile, sizeof(readFile), arquivo) != NULL)
         {
@@ -95,7 +97,7 @@ int main()
 
             ghj++;
         }
-
+        int m = 0;
         for (int e = 0; e < variacaoENtradas; e++)
         {
             for (int j = 0; j < ghj; j++)
@@ -103,11 +105,17 @@ int main()
                 // printf("%s\n",eric[ghj].iid);
                 if (strcmp(eric[j].iid, entradas[e]) == 0)
                 {
-                    toString(eric[j]);
+                    pegar[m] = eric[j];
+                    m++;
                 }
             }
         }
-
+        pegar = quicksortRec(pegar, 0, m);
+        for (int e = 1; e < variacaoENtradas; e++)
+        {
+            toString(pegar[e]);
+        }
+        free(pegar);
         free(eric);
     }
     for (int i = 0; i < MAXTAM; i++)
@@ -441,4 +449,34 @@ void insertDate(Date *d, char *stringData)
     d->month = atof(month);
     d->year = atof(year);
     d->day = atof(day);
+}
+Musica *quicksortRec(Musica *eric, int esq, int dir)
+{
+    int i = esq, j = dir;
+    Musica pivo = eric[(dir + esq) / 2];
+    while (i <= j)
+    {
+        while (eric[i].duration_ms < pivo.duration_ms)
+            i++;
+        while (eric[j].duration_ms > pivo.duration_ms)
+            j--;
+        if (i <= j)
+        {
+            swap(eric, i, j);
+            i++;
+            j--;
+        }
+    }
+    if (esq < j)
+        quicksortRec(eric, esq, j);
+    if (i < dir)
+        quicksortRec(eric, i, dir);
+
+    return eric;
+}
+void swap(Musica *eric, int i, int j)
+{
+    Musica a = eric[i];
+    eric[i] = eric[j];
+    eric[j] = a;
 }

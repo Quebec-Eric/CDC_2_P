@@ -1,3 +1,9 @@
+/***************** *************
+*   Eric Azevedo de Oliveira  * 
+*   Aluno da Puc              *  
+*   2 periodo                 *  
+*******************************/
+
 import java.io.FileWriter;
 import java.util.*;
 import java.io.BufferedReader;

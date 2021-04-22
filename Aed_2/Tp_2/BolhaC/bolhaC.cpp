@@ -1,8 +1,8 @@
-/************   ******************
+/* *****************************
 *   Eric Azevedo de Oliveira  * 
 *   Aluno da Puc              *  
 *   2 periodo                 *  
-*******************************/
+ ******************************/
 
 
 #include <stdio.h>
@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #define MAXTAM 400
 typedef struct
 {
@@ -61,12 +62,17 @@ Musica fazerTudo(char *readFile, int lengthReadFile);
 void insertDate(Date *d, char *stringData);
 void displayFormattedDate(Date *d);
 double handle_percentage(double value);
-char *processData(char *dado);
+char *fazerCerto(char *pato);
 char *newString(char *oldString, int oldTamanho);
 Musica colocarTudoClass(char *readFile, Musica eric);
+Musica *recuInsercao(Musica *eric, int n, int i);
+void escritaNoarquivo(double eric);
+void swap(Musica *eric, int i, int j);
+Musica *bolha(Musica *eric, int n);
 
 int main()
 {
+    clock_t begin = clock();
     char *entradas[MAXTAM];
     for (int i = 0; i < MAXTAM; i++)
         entradas[i] = (char *)calloc(100, sizeof(char));
@@ -78,13 +84,14 @@ int main()
     } while (strncmp(entradas[variacaoENtradas++], "FIM", 3) != 0 && variacaoENtradas < MAXTAM);
 
     FILE *arquivo = fopen("/tmp/data.csv", "r");
-
+ 
     if (arquivo != NULL)
     {
         char readFile[1000];
         int ghj = 0;
 
         Musica *eric = (Musica *)malloc(170625 * sizeof(Musica));
+        Musica *pegar = (Musica *)malloc(variacaoENtradas * sizeof(Musica));
         fgets(readFile, sizeof(readFile), arquivo);
         while (fgets(readFile, sizeof(readFile), arquivo) != NULL)
         {
@@ -95,7 +102,7 @@ int main()
 
             ghj++;
         }
-
+        int m = 0;
         for (int e = 0; e < variacaoENtradas; e++)
         {
             for (int j = 0; j < ghj; j++)
@@ -103,18 +110,31 @@ int main()
                 // printf("%s\n",eric[ghj].iid);
                 if (strcmp(eric[j].iid, entradas[e]) == 0)
                 {
-                    toString(eric[j]);
+                    pegar[m] = eric[j];
+                    m++;
                 }
             }
         }
+        //
 
+        pegar = recuInsercao(pegar, variacaoENtradas, 0);
+        pegar = bolha(pegar, variacaoENtradas);
+        for (int e = 1; e < variacaoENtradas; e++)
+        {
+            toString(pegar[e]);
+        }
+        free(pegar);
         free(eric);
+        clock_t end = clock();
+        double time_spent = (double)(end - begin);
+       // escritaNoarquivo(time_spent);
     }
     for (int i = 0; i < MAXTAM; i++)
     {
         free(entradas[i]);
     }
 }
+//pegar os artistas
 Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
 {
     int testar = 0;
@@ -143,6 +163,7 @@ Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
     //printf("============%s\n",music.artistis);
     return music;
 }
+//pegar as primeiras informacoes
 Musica get3Information(char *readFile, Musica music, int lenghtReadFile)
 {
     int fritPosition = caracterPosition('[', readFile, lenghtReadFile);
@@ -179,24 +200,25 @@ Musica get3Information(char *readFile, Musica music, int lenghtReadFile)
 
     return music;
 }
-char *processData(char *dado)
+// colocar um ; no local correto
+char *fazerCerto(char *pato)
 {
-    char *dado_tratado = (char *)calloc(1000, sizeof(char));
+    char *novaString = (char *)calloc(1000, sizeof(char));
     int j = 0;
 
-    for (int i = 0; i < strlen(dado); i++)
+    for (int i = 0; i < strlen(pato); i++)
     {
-        if (dado[i] == '\"')
+        if (pato[i] == '\"')
         {
             i++;
 
-            if (dado[i] == '[')
+            if (pato[i] == '[')
             {
-                while (dado[i] != '\"')
+                while (pato[i] != '\"')
                 {
-                    if (dado[i] != '\'')
+                    if (pato[i] != '\'')
                     {
-                        dado_tratado[j] = dado[i];
+                        novaString[j] = pato[i];
                         j++;
                     }
 
@@ -205,51 +227,51 @@ char *processData(char *dado)
             }
             else
             {
-                while (dado[i] != '\"')
+                while (pato[i] != '\"')
                 {
-                    dado_tratado[j] = dado[i];
+                    novaString[j] = pato[i];
                     j++;
                     i++;
                 }
             }
         }
-        else if (dado[i] == '[')
+        else if (pato[i] == '[')
         {
-            while (dado[i] != ']')
+            while (pato[i] != ']')
             {
-                if (dado[i] != '\'')
+                if (pato[i] != '\'')
                 {
-                    dado_tratado[j] = dado[i];
+                    novaString[j] = pato[i];
                     j++;
                 }
 
                 i++;
             }
 
-            dado_tratado[j] = dado[i];
+            novaString[j] = pato[i];
             j++;
         }
-        else if (dado[i] == ',')
+        else if (pato[i] == ',')
         {
-            dado_tratado[j] = ';';
+            novaString[j] = ';';
             j++;
         }
         else
         {
-            dado_tratado[j] = dado[i];
+            novaString[j] = pato[i];
             j++;
         }
     }
 
-    return dado_tratado;
+    return novaString;
 }
-
+//fazertudo
 Musica fazerTudo(char *readFile, int lengthReadFile)
 {
     Musica eric;
     char *pegar;
 
-    readFile = processData(readFile);
+    readFile = fazerCerto(readFile);
     eric = getArtistis(readFile, eric, lengthReadFile);
     eric = get3Information(readFile, eric, lengthReadFile);
     readFile = newString(readFile, lengthReadFile);
@@ -258,7 +280,7 @@ Musica fazerTudo(char *readFile, int lengthReadFile)
 
     return eric;
 }
-
+//colocar tudo na class
 Musica colocarTudoClass(char *readFile, Musica eric)
 {
     char *piece;
@@ -350,7 +372,7 @@ Musica colocarTudoClass(char *readFile, Musica eric)
 
     return eric;
 }
-
+//fazer uma nova string
 char *newString(char *oldString, int oldTamanho)
 {
     int ondeCortar = caracterPosition(']', oldString, oldTamanho);
@@ -370,7 +392,7 @@ char *newString(char *oldString, int oldTamanho)
     // printf("%s\n", oldString);
     return resposta;
 }
-
+// pegar a posicao do caracter
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile)
 {
     int positionC = 0;
@@ -391,7 +413,7 @@ double handle_percentage(double value)
 {
     return ceil(value) == value ? value / 100 : value;
 }
-
+//imprimir
 void toString(Musica music)
 {
 
@@ -408,7 +430,7 @@ void displayFormattedDate(Date *d)
 {
     printf("%0*d/%0*d/%0*d", 2, d->day, 2, d->month, 4, d->year);
 }
-//s
+//fazer a data
 void insertDate(Date *d, char *stringData)
 {
     char day[3];
@@ -441,4 +463,59 @@ void insertDate(Date *d, char *stringData)
     d->month = atof(month);
     d->year = atof(year);
     d->day = atof(day);
+}
+// fazer a insercao
+Musica *recuInsercao(Musica *eric, int n, int i)
+{
+    if (i < n)
+    {
+        Musica tmp = eric[i];
+        int j = i - 1;
+
+        while ((j >= 0) && (strcmp(eric[j].nome, tmp.nome) > 0))
+        {
+            eric[j + 1] = eric[j];
+            j--;
+        }
+        eric[j + 1] = tmp;
+        return recuInsercao(eric, n, i + 1);
+    }
+    return eric;
+}
+Musica *bolha(Musica *eric, int n)
+{
+    int i, j;
+    for (i = (n - 1); i > 0; i--)
+    {
+        for (j = 0; j < i; j++)
+        {
+            if (strcmp(eric[j].danceability, eric[j + 1].danceability) > 0)
+
+            {
+                swap(eric, j, j + 1);
+            }
+        }
+    }
+    return eric;
+}
+void swap(Musica *eric, int i, int j)
+{
+    Musica a = eric[i];
+    eric[i] = eric[j];
+    eric[j] = a;
+}
+void escritaNoarquivo(double eric)
+{
+
+    char *matricula = {"Matrucula: 694493"};
+    FILE *pont_arq = fopen("694493_Bolha.txt", "w");
+    if (pont_arq == NULL)
+    {
+        printf("Erro na abertura do arquivo!");
+    }
+    else
+    {
+        fprintf(pont_arq, "Matricula== %s  ", matricula);
+        fprintf(pont_arq, " Tempo== %lf", eric);
+    }
 }

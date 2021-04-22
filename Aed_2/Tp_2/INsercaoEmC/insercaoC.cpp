@@ -1,3 +1,10 @@
+/************** ****************
+*   Eric Azevedo de Oliveira  * 
+*   Aluno da Puc              *  
+*   2 periodo                 *  
+*******************************/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -468,6 +475,23 @@ Musica *insercao(Musica *eric, int n)
             j--;
         }
         eric[j + 1] = tmp;
+    }
+    return eric;
+}
+Musica *recuInsercao(Musica *eric, int n, int i)
+{
+    if (i < n)
+    {
+        Musica tmp = eric[i];
+        int j = i - 1;
+
+        while ((j >= 0) && (strcmp(eric[j].iid, tmp.iid) > 0))
+        {
+            eric[j + 1] = eric[j];
+            j--;
+        }
+        eric[j + 1] = tmp;
+        return recuInsercao(eric, n, i++);
     }
     return eric;
 }
