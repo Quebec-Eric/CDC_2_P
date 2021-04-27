@@ -1,15 +1,20 @@
 
-/************* *****************
-*   Eric Azevedo de Oliveira  *
-*   Aluno da Puc              *
-*   2 periodo                 *
-*******************************/
+/************* **********************
+* @author Eric Azevedo de Oliveira  *
+*   Aluno da Puc             			  *
+*   2 periodo     						      *
+*    Tp3                            *
+************************************/
 
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.*;
+
+/*
+	Inicio class Musica
+*/
 
 class Musica {
 	private String id;
@@ -30,6 +35,9 @@ class Musica {
 	private double speechiness;
 	private int year;
 
+	/*
+		Set e Get Linha39 | linha 175
+	*/
 	public String getId() {
 		return id;
 	}
@@ -166,6 +174,9 @@ class Musica {
 		this.year = year;
 	}
 
+	/*
+	Contrutor da class Musica
+	*/
 	public Musica() {
 		super();
 		this.id = "";
@@ -186,7 +197,9 @@ class Musica {
 		this.year = 1;
 	}
 
-	/* Metodo toString */
+	/* *************************************************
+	 Metodo toString para retornar tudo na class Musica*
+	*/
 	public String toString() {
 		return this.id + " ## " + this.artistas + " ## " + this.name + " ## " + this.realease_date + " ## "
 				+ this.acousticness + " ## " + this.danceability + " ## " + this.instrumentalness + " ## "
@@ -196,8 +209,13 @@ class Musica {
 	}
 
 }
-/*----------Fim class Musica-------------------------------------------- */
+/*
+*Fim class Musica
+*/
 
+/*
+	Inicio class Lista
+*/
 class Lista {
 	private Musica[] quebecArray;
 	private int n;
@@ -206,95 +224,95 @@ class Lista {
 	public Lista() {
 		this(6);
 	}
-
+	/*  Inico da Class Lista passando com o paramentro */
 	public Lista(int tamanho) {
 		quebecArray = new Musica[tamanho];
 		n = 0;
 	}
-
+	 /*   Funcao para colocar A class Musica no inicio da lista */
 	public void inserirInicio(Musica musicas) throws IOException {
-
 		if (n >= quebecArray.length) {
-			throw new  IOException("Erro ao inserir!");
+			throw new IOException("Erro ao inserir!");
 		}
-
 		for (int i = n; i > 0; i--) {
 			quebecArray[i] = quebecArray[i - 1];
 		}
 		quebecArray[0] = musicas;
 		n++;
-	}
+	}//inserirInicio
 
+	/* Funcao para inserir a class Musica na posicao passada como paramentro*/
 	public void inserir(Musica musicas, int posicao) throws IOException {
 		if (n >= quebecArray.length || posicao < 0 || posicao > n) {
 			throw new IOException("Erro ao inserir!");
 		}
-
 		for (int i = n; i > posicao; i--) {
 			quebecArray[i] = quebecArray[i - 1];
 		}
 		quebecArray[posicao] = musicas;
 		n++;
-	}
+	}//Fim Inserir
 
+	/* Funcao para inserir no fim da lista a Class Musica */
 	public void inserirFIM(Musica musicas) throws IOException {
 		if (n >= quebecArray.length) {
 			throw new IOException("Erro ao inserir!");
 		}
 		quebecArray[n] = musicas;
 		n++;
+	}//FIM inserirFim
 
-	}
-
+	/* Funcao para remover o objeto do inicio da Lista*/
 	public Musica removerInicio() throws IOException {
 		if (n == 0) {
 			throw new IOException("Erro ao remover!");
 		}
 		Musica eric = quebecArray[0];
 		n--;
-
 		for (int i = 0; i < n; i++) {
 			quebecArray[i] = quebecArray[i + 1];
 		}
 		return eric;
-	}
-
+	}//FIM removerInicio
+ /* Funcao para remover o intem na posicao passada como paramentro */
 	public Musica remover(int posicao) throws IOException {
 		if (n >= quebecArray.length || posicao < 0 || posicao > n) {
 			throw new IOException("Erro ao inserir!");
 		}
 		Musica eric = quebecArray[posicao];
 		n--;
-		for (int i = 0; i < n; i++) {
+		for (int i = posicao; i < n; i++) {
 			quebecArray[i] = quebecArray[i + 1];
 		}
 		return eric;
-	}
+	}// Fim remover
 
+	/* Funcao na qual ira remover a ultima class da lista(na ultima posicao) */
 	public Musica removerFim() throws IOException {
 		if (n == 0) {
 			throw new IOException("Erro ao remover!");
 		}
+			Musica eric =quebecArray[n-1];
+			n--;
+	return eric;
+}//FIM removerFIm
 
-		return quebecArray[n--];
-	}
-
+/* Funcao para mostrar a lista inteira */
 	public void mostrar() {
-
 		for (int i = 0; i < n; i++) {
-			System.out.println("["+i+"]"+ quebecArray[i].toString() + " ");
+			System.out.println("[" + i + "] " + quebecArray[i].toString());
 		}
-
-	}
+	}// fim Mostrar
 
 }
 /*
  * Fim class Lista
- * -----------------------------------------------------------------------------
- * ------------
+ *
  */
 
+/*  Inciio class main    */
 public class ListaAloca {
+	
 	public static void main(String[] args) throws IOException {
 		String linhaArquivo = "";
 		String[] entradaDados = new String[600];
@@ -334,7 +352,7 @@ public class ListaAloca {
 			}
 		}
 
-		try {
+		try { /// tmp/data.csv
 			conteudoCsv = new BufferedReader(new FileReader("/tmp/data.csv"));
 			// String[] saidas = new String[variarAloca+1];
 			int y = 0;
@@ -352,81 +370,20 @@ public class ListaAloca {
 			}
 
 			Lista fazerTp3 = new Lista(variarAloca + saberTudo);
+
 			/* retornar a mudancas */
 			int hj = 0;
 			for (int i = 0; i < variarAloca; i++) {
 				for (int z = 0; z < y; z++) {
 					if (comTudo[i].equals(classMusicas[z].getId())) {
 						fazerTp3.inserirFIM(classMusicas[z]);
-						// System.out.println(classMusicas[z].getId());
+
 					}
 
 				}
 			}
+			fazerTp3 = fazerALista(fazerTp3, classMusicas, y, tamahho, tyr, variarAloca, mudancasLista);
 
-			// inserirInicio(Musica musicas)
-			// public void inserir(Musica musicas , int posicao )
-			// inserirFIM(Musica musicas)
-			String inserirInicio = "II";
-			String inserirQualquerLugar = "I*";
-			String inserirnoFIM = "IF";
-			String removerDoInicio = "RI";
-			String removerQualquerPosicao = "R*";
-			String removerDoFIM = "RF";
-			for (int i = 0; i < tamahho; i++) {
-				String[] eric = mudancasLista[i].split(" ");
-			//		System.out.println(mudancasLista[i]);
-				if (eric[0].equals(inserirInicio)) {
-					for (int t = variarAloca; t < tyr; t++) {
-						for (int z = 0; z < y; z++) {
-							if (eric[1].contains(classMusicas[z].getId())) {
-								fazerTp3.inserirInicio(classMusicas[z]);
-								//System.out.println(classMusicas[z].getId());
-								t = tyr + 1;
-								z = y + 1;
-							}
-						}
-					}
-				} else if (eric[0].equals(inserirQualquerLugar)) {
-					int posicao = Integer.parseInt(eric[1]);
-					for (int t = variarAloca; t < tyr; t++) {
-						for (int z = 0; z < y; z++) {
-							if (eric[2].contains(classMusicas[z].getId())){
-								fazerTp3.inserir(classMusicas[z], posicao);// inserirQualquerPosicao
-								t = tyr + 1;
-								z = y + 1;
-							}
-						}
-					}
-				} else if (eric[0].equals(inserirnoFIM)) {
-					for (int t = variarAloca; t < tyr; t++) {
-						for (int z = 0; z < y; z++) {
-							if (eric[1].contains(classMusicas[z].getId())) {
-								fazerTp3.inserirFIM(classMusicas[z]);
-								//System.out.println(comTudo[t]); // inseririFIM
-								t = tyr + 1;
-								z = y + 1;
-							}
-						}
-					}
-
-				} else if (eric[0].equals(removerDoInicio)) {
-					// chamar remover do inicio
-					Musica pegar = fazerTp3.removerInicio();
-					System.out.println("(R) " + pegar.getNome());
-			} else if (eric[0].equals(removerQualquerPosicao)) {
-					int posicao = Integer.parseInt(eric[1]);
-					// chamar remover da posica
-					Musica pegar = fazerTp3.remover(posicao);
-					System.out.println("(R) " + pegar.getNome());
-				} else {
-					Musica pegar = fazerTp3.removerFim();// vai retornar musica
-					//System.out.println(fazerTp3.removerFim().getId());
-				//	System.out.println("(R) " + pegar.toString());
-				}
-
-
-			}
 			fazerTp3.mostrar();
 
 		} catch (IOException e) {
@@ -435,6 +392,73 @@ public class ListaAloca {
 			conteudoCsv.close();
 		}
 
+	}
+
+	public static Lista fazerALista(Lista fazerTp3, Musica[] classMusicas, int y, int tamahho, int tyr, int variarAloca,
+			String[] mudancasLista) throws IOException {
+
+		String inserirInicio = "II";
+		String inserirQualquerLugar = "I*";
+		String inserirnoFIM = "IF";
+		String removerDoInicio = "RI";
+		String removerQualquerPosicao = "R*";
+		String removerDoFIM = "RF";
+		for (int i = 0; i < tamahho; i++) {
+			String[] eric = mudancasLista[i].split(" ");
+			if (eric[0].equals(inserirInicio)) {
+				for (int t = variarAloca; t < tyr; t++) {
+					for (int z = 0; z < y; z++) {
+						if (eric[1].contains(classMusicas[z].getId())) {
+							fazerTp3.inserirInicio(classMusicas[z]);
+							t = tyr + 1;
+							z = y + 1;
+						}
+					}
+				}
+			} else if (eric[0].equals(inserirQualquerLugar)) {
+				int posicao = Integer.parseInt(eric[1]);
+				for (int t = variarAloca; t < tyr; t++) {
+					for (int z = 0; z < y; z++) {
+						if (eric[2].contains(classMusicas[z].getId())) {
+							fazerTp3.inserir(classMusicas[z], posicao);
+
+							t = tyr + 1;
+							z = y + 1;
+						}
+					}
+				}
+			} else if (eric[0].equals(inserirnoFIM)) {
+				for (int t = variarAloca; t < tyr; t++) {
+					for (int z = 0; z < y; z++) {
+						if (eric[1].contains(classMusicas[z].getId())) {
+								fazerTp3.inserirFIM(classMusicas[z]);
+
+							t = tyr + 1;
+							z = y + 1;
+						}
+					}
+				}
+
+			} else if (eric[0].equals(removerDoInicio)) {
+
+				Musica pegar = fazerTp3.removerInicio();
+				System.out.println("(R) " + pegar.getNome());
+
+				} else if (eric[0].equals(removerQualquerPosicao)) {
+				int posicao = Integer.parseInt(eric[1]);
+  			Musica pegar = fazerTp3.remover(posicao);
+				System.out.println("(R) " + pegar.getNome());
+
+			} else if (eric[0].equals(removerDoFIM)) {
+				Musica pegar = fazerTp3.removerFim();
+				if (pegar != null) {
+				System.out.println("(R) " + pegar.getNome());
+				}
+
+			}
+		}
+
+		return fazerTp3;
 	}
 
 	/* Funcao onde ira alocar todas na class */
