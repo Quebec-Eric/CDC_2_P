@@ -312,7 +312,7 @@ class Lista {
 
 /*  Inciio class main    */
 public class ListaAloca {
-	
+
 	public static void main(String[] args) throws IOException {
 		String linhaArquivo = "";
 		String[] entradaDados = new String[600];
