@@ -5,12 +5,15 @@
 *   2 periodo     						      *
 *    Tp3                            *
 ************************************/
-import java.util.Random;
+import java.io.FileWriter;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.*;
+import java.io.BufferedWriter;
+import java.io.File;
+
 
 /*
 	Inicio class Musica
@@ -333,6 +336,7 @@ class Musica {
 public class ListaDuplamente {
 
 	public static void main(String[] args) throws IOException {
+
 		long tempoInicial = System.currentTimeMillis(); /* saber o tempo de duracao */
 		String linhaArquivo = "";
 		String[] entradaDados = new String[600];
@@ -375,6 +379,7 @@ public class ListaDuplamente {
 		//	ordenar(0, eric.tamanho()-1);
 		eric.ordenar();
 		eric.mostrar();
+		wreiterFile(System.currentTimeMillis() - tempoInicial); /* mostrar na pasta log */
 		} catch (IOException e) {
 			System.out.println("Erro :" + e);
 		} finally {
@@ -538,4 +543,23 @@ public class ListaDuplamente {
 		return nova;
 
 	}
+	/* escrita na pasta log */
+	public static void wreiterFile(long l) throws IOException {
+		File arquivo = new File("matricula_quicksort2.txt");
+		try {
+			if (!arquivo.exists()) {
+				arquivo.createNewFile();
+			}
+			FileWriter ttt = new FileWriter(arquivo);
+			BufferedWriter escrita = new BufferedWriter(ttt);
+			escrita.write("Matrucula: 694493 " + "Tempo: " + l);
+			escrita.close();
+			ttt.close();
+
+		} catch (Exception e) {
+
+		}
+
+	}
+	/* fim da escrita */
 }
