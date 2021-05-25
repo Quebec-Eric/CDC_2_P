@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #define MAXTAM 400
 typedef struct
 {
@@ -44,7 +45,10 @@ Musica Clone_music(Musica music)
 
     return music;
 }
+/*Fim Struct Musica */
 
+//------------------------------------------------------------------
+/* inicio funcao CelulaDupla*/
 typedef struct CelulaDupla
 {
     Musica elemento;
@@ -52,6 +56,32 @@ typedef struct CelulaDupla
     struct CelulaDupla *ant;
 } CelulaDupla;
 
+/*  inicio funcoes utilizadas  */
+int caracterPosition(char caracter, char *readFile, int lenghtReadFile);
+Musica getArtistis(char *readFile, Musica music, int lenghtReadFile);
+Musica get3Information(char *readFile, Musica music, int lenghtReadFile);
+void toString(Musica music);
+Musica fazerTudo(char *readFile, int lengthReadFile);
+void insertDate(Date *d, char *stringData);
+void displayFormattedDate(Date *d);
+double handle_percentage(double value);
+char *processData(char *dado);
+char *newString(char *oldString, int oldTamanho);
+Musica colocarTudoClass(char *readFile, Musica eric);
+CelulaDupla *novaCelulaDupla(Musica elemento);
+CelulaDupla *novaCelulaDuplaVazia();
+void inserirFim(Musica x);
+CelulaDupla *getelementoPos(int posicao);
+void swap(CelulaDupla *i, CelulaDupla *j);
+void quickSort(int esq, int dir);
+int tamanho();
+void ordenar();
+void start();
+void mostrar();
+void escritaNoarquivo(double eric);
+/* fim funcoes utilizdas */
+
+//criacao de uma nova celula usando reparticao de memoria com malloc
 CelulaDupla *novaCelulaDupla(Musica elemento)
 {
     CelulaDupla *nova = (CelulaDupla *)malloc(sizeof(CelulaDupla));
@@ -59,9 +89,11 @@ CelulaDupla *novaCelulaDupla(Musica elemento)
     nova->ant = nova->prox = NULL;
     return nova;
 }
+//ponteiros primeiro , e ultimo
 CelulaDupla *primeiro;
 CelulaDupla *ultimo;
 
+//criacao de uma nova Celula com malloc mas sem passagem de parametro
 CelulaDupla *novaCelulaDuplaVazia()
 {
     CelulaDupla *nova = (CelulaDupla *)malloc(sizeof(CelulaDupla));
@@ -69,6 +101,8 @@ CelulaDupla *novaCelulaDuplaVazia()
     nova->ant = nova->prox = NULL;
     return nova;
 }
+
+/* inserir fim  na Lista*/
 void inserirFim(Musica x)
 {
     ultimo->prox = novaCelulaDupla(x);
@@ -76,6 +110,7 @@ void inserirFim(Musica x)
     ultimo = ultimo->prox;
 }
 
+/* saber a posicao dos elementos */
 CelulaDupla *getelementoPos(int posicao)
 {
     CelulaDupla *i = primeiro->prox;
@@ -86,6 +121,8 @@ CelulaDupla *getelementoPos(int posicao)
     }
     return i;
 }
+
+/* Funcao de troca de valores , pensei em fazer a troca dos ponteiros mas iria dar um trabalho foda*/
 void swap(CelulaDupla *i, CelulaDupla *j)
 {
     Musica tmp = i->elemento;
@@ -93,6 +130,7 @@ void swap(CelulaDupla *i, CelulaDupla *j)
     j->elemento = tmp;
 }
 
+/*funcao na qual ira ser realizado a ordenaxao */
 void quickSort(int esq, int dir)
 {
 
@@ -126,6 +164,8 @@ void quickSort(int esq, int dir)
         quickSort(i, dir);
     }
 }
+
+/*  Saber o tamanho da lista*/
 int tamanho()
 {
     int tamanho = 0;
@@ -136,28 +176,19 @@ int tamanho()
     }
     return tamanho;
 }
+/*funcao na qual ira char o algoritimo de ordenacao */
 void ordenar()
 {
     quickSort(0, tamanho()-1);
 }
+
+/* Funcao onde tudo comeca*/
 void start()
 {
     ultimo=primeiro=novaCelulaDuplaVazia();
 }
 
-
-
-int caracterPosition(char caracter, char *readFile, int lenghtReadFile);
-Musica getArtistis(char *readFile, Musica music, int lenghtReadFile);
-Musica get3Information(char *readFile, Musica music, int lenghtReadFile);
-void toString(Musica music);
-Musica fazerTudo(char *readFile, int lengthReadFile);
-void insertDate(Date *d, char *stringData);
-void displayFormattedDate(Date *d);
-double handle_percentage(double value);
-char *processData(char *dado);
-char *newString(char *oldString, int oldTamanho);
-Musica colocarTudoClass(char *readFile, Musica eric);
+/* funcao de mostrar a lista completa*/
 void mostrar()
 {
     for(CelulaDupla* i=primeiro->prox;i!=NULL;i=i->prox)
@@ -166,8 +197,10 @@ void mostrar()
     }
 }
 
+/* inicio do programa*/
 int main()
 {
+    clock_t begin = clock();
     start();
     char *entradas[MAXTAM];
     for (int i = 0; i < MAXTAM; i++)
@@ -177,12 +210,12 @@ int main()
     do
     {
         scanf("%s", entradas[variacaoENtradas]);
-    } while (strncmp(entradas[variacaoENtradas++], "FIM", 3) != 0 && variacaoENtradas < MAXTAM);
+    } while (strncmp(entradas[variacaoENtradas++], "FIM", 3) != 0 && variacaoENtradas < MAXTAM); // ler a primeira parte do pub.in
     ///tmp/data.csv
-    FILE *arquivo = fopen("/tmp/data.csv", "r");
+    FILE *arquivo = fopen("/tmp/data.csv", "r"); // abri o arquivo
 
     if (arquivo != NULL)
-    {   
+    {
         char readFile[1000];
         int ghj = 0;
 
@@ -194,7 +227,7 @@ int main()
 
             int lengthReadFile = sizeof(readFile) - 1;
 
-            eric[ghj] = fazerTudo(readFile, lengthReadFile);
+            eric[ghj] = fazerTudo(readFile, lengthReadFile); // ler e executar todas as linhas do arquivo
 
             ghj++;
         }
@@ -206,21 +239,24 @@ int main()
                 // printf("%s\n",eric[ghj].iid);
                 if (strcmp(eric[j].iid, entradas[e]) == 0)
                 {
-                    pegar[m] = eric[j];
+                    pegar[m] = eric[j]; // pegar apenas as linhas nas quais os ids sao iguais aos do inicio
                      inserirFim(pegar[m]);
                     m++;
                 }
             }
         }
-        ordenar();
+        ordenar(); // funcao de ordenar
        mostrar();
-        free(pegar);
+        free(pegar); //desalocar a  memoria
         free(eric);
     }
     for (int i = 0; i < MAXTAM; i++)
     {
         free(entradas[i]);
     }
+    clock_t end = clock();
+   double time_spent = (double)(end - begin);
+   escritaNoarquivo(time_spent);
 }
 Musica getArtistis(char *readFile, Musica music, int lenghtReadFile)
 {
@@ -548,4 +584,20 @@ void insertDate(Date *d, char *stringData)
     d->month = atof(month);
     d->year = atof(year);
     d->day = atof(day);
+}
+
+void escritaNoarquivo(double eric)
+{
+
+    char *matricula = {"Matricula: 694493"};
+    FILE *pont_arq = fopen("694493_quicksort2.txt", "w");
+    if (pont_arq == NULL)
+    {
+        printf("Erro na abertura do arquivo!");
+    }
+    else
+    {
+        fprintf(pont_arq, "%s ", matricula);
+        fprintf(pont_arq, " Tempo== %lf", eric);
+    }
 }
