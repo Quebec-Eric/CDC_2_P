@@ -1,30 +1,38 @@
+/***** *************************
+*   Eric Azevedo de Oliveira  *
+*   Aluno da Puc              *
+*   2 periodo                 *
+*******************************/
+
+// inicio class Celula
 class Celula {
-	public int elemento;
-	public Celula direita;
-	public Celula esquerda;
-	public Celula cima;
-	public Celula inferiror;
+	public int elemento; // valor da variavel que sera referenciada
+	public Celula direita; // ira referenciar a variavel que se encontra a sua direita
+	public Celula esquerda; // ira referenciar a variavel que se encontra a esquerda
+	public Celula cima; // ira referenciar a variavel que esta em cima dela
+	public Celula inferiror; // ira referenciar a variavel que esta na posicao inferior a ela
 
 	public Celula() {
-		this(0);
+		this(0); // iniciar a celula com o valor 0
 	}
 
 	public Celula(int elemento) {
-		this.elemento = elemento;
-		this.direita = this.esquerda = this.cima = this.inferiror = null;
+		this.elemento = elemento;// receber o valor fo elemento
+		this.direita = this.esquerda = this.cima = this.inferiror = null; // apontar para null com todas as referencias
 	}
 }
-
+ // inicio class MAtriz
 class Matriz {
 
-	private Celula inicio;
-	private int linha;
-	private int coluna;
+	private Celula inicio;// basicamente a referencia da matriz
+	private int linha; // basicamente as linhas horizontais presentes na variavel
+	private int coluna; // referencia as linhas verticas da matriz
 
 	public Matriz() {
-		this(4, 4);
+		this(4, 4); // passar como parametro iniciar uma matriz 4.4
 	}
 
+// criacao da matriz como contrutor
 	public Matriz(int linha, int coluna) {
 
 		this.coluna = coluna;
@@ -134,15 +142,15 @@ public Matriz somar(Matriz primeira , Matriz segunda){
      nova = new Matriz(primeira.linha, primeira.coluna); // fazer uma nova matriz`
      Celula nn= nova.inicio; // apontar esse nova matriz para o inicio
 
-     for(int i=0;i<primeira.linha;i++){ // primeiro for para passar de linha a linha
+     for(int i=0;i<nova.linha&&nn!=null;i++,nn=nn.inferiror){ // primeiro for para passar de linha a linha
        Celula nb= nn; // apontar para o proximo elemento
 
-       for (int z=0;z<primeira.coluna ;z++ ) { // pecorrer cara coluna da matriz
+       for (int z=0;z<nova.coluna&&nb!=null;z++,nb=nb.direita ) { // pecorrer cara coluna da matriz
 
-          nb.elemento=somarMM(primeira, segunda,z,i); // chamar o funcao somarMM
-          nb=nb.direita; // passar para o proximo elemento
+          nb.elemento=somarMM(primeira, segunda,i,z); // chamar o funcao somarMM
+
        }
-       nn=nn.inferiror; //descer uma casa para acessar a proxima linha
+
      }
 
   }
@@ -151,10 +159,10 @@ public Matriz somar(Matriz primeira , Matriz segunda){
 }
 
 // somar cada numero na posicao passada
-public int somarMM(Matriz a, Matriz b , int caminhoL, int caminhoC){
+public int somarMM(Matriz primeira, Matriz segunda , int caminhoL, int caminhoC){
   // referencias o inicio
-  Celula linhaA=a.inicio;
-  Celula colunaA=b.inicio;
+  Celula linhaA=primeira.inicio;//referencias para o inicio da matriz primeira
+  Celula colunaA=segunda.inicio; // referencia para o inicio da matriz segunda
       // posicionar em qual coluna o obajeto a ser somado esta
         for(int i=0;i<caminhoC;i++)
        {
@@ -196,15 +204,20 @@ public Matriz mutiplicacaoPegarValores(Matriz primeira , Matriz segunda){
   public int mutiplicacaoMatriz(Matriz primeira , Matriz segunda, int saberLinha, int saberColuna){
          Celula primeiraC=primeira.inicio;
          Celula segundaC=segunda.inicio;
+				 // ir ate a linha que sera mutiplicada
          for(int i=0;i<saberLinha;i++)
          {
              primeiraC=primeiraC.inferiror;
          }
+				 //ir ate a coluna que sera mutiplicada
          for(int i=0;i<saberColuna;i++)
          {
              segundaC=segundaC.direita;
          }
+
 				int mult=0;
+
+				// mutiplicar os valores ate mutipliar a linha e a coluna inteira da matriz ( linha*coluna)
         for(;primeiraC!=null && segundaC!=null;primeiraC=primeiraC.direita,segundaC=segundaC.inferiror){
              mult+=primeiraC.elemento*segundaC.elemento;
 					 }
@@ -221,26 +234,24 @@ public class Ma {
 
 	public static void main(String[] args) {
 		  	int saberNumerodeLinhaseColunas=0;
-				saberNumerodeLinhaseColunas=MyIO.readInt();
-				for(int i =0; i<saberNumerodeLinhaseColunas;i++){
-					int linha=MyIO.readInt();
+				saberNumerodeLinhaseColunas=MyIO.readInt(); // saber a quantidade das matrizes
+				for(int i =0; i<saberNumerodeLinhaseColunas;i++){ //  estrutura de repeticao para pegar o numero de testes que seram feitos
+					int linha=MyIO.readInt(); // pegar linha e coluna da primeira matriz == tp3
 					int coluna=MyIO.readInt();
-					Matriz m1=new Matriz(linha,coluna);
-					m1.colocarValores();
-
-					int linha2=MyIO.readInt();
+					Matriz tp3=new Matriz(linha,coluna); // criar a matriz tp3
+					tp3.colocarValores(); // colocar os valores na matriz
+					tp3.mostrarDiagonalPRincipal();// mostrar a diagonal principal
+					tp3.mostrarDiagonalSecundaria(); // mostrar a diagonal secundaria
+					int linha2=MyIO.readInt();//pegar os valores da coluna e linha da matriz m2
 					int coluna2=MyIO.readInt();
-					Matriz m2=new Matriz(linha2,coluna2);
+					Matriz m2=new Matriz(linha2,coluna2);// cria a matriz m2
 					m2.colocarValores();
-
-					Matriz soma= m1.somar(m1,m2);
-
-					Matriz muti=m1.mutiplicacaoPegarValores(m1,m2);
-
-					m1.mostrarDiagonalPRincipal();
-					m1.mostrarDiagonalSecundaria();
-					soma.mostrar();
-					muti.mostrar();
+					Matriz soma= tp3.somar(tp3,m2);
+							//System.out.println("aki");
+							soma.mostrar();
+							//System.out.println("---");
+					Matriz muti=tp3.mutiplicacaoPegarValores(tp3,m2); // fazer a mutiplicacao da matriz tp3 e m2
+					muti.mostrar(); // mostrar
 
 
 				}
