@@ -275,7 +275,6 @@ class ListaFlex{
 		}
 		Celula i;
 	  for(i = primeiro; i.prox != ultimo; i = i.prox);
-
 		Musica pegar= ultimo.elemento;
 		ultimo = i;
 		i = ultimo.prox = null;

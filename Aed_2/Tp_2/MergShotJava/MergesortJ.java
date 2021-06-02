@@ -1,7 +1,7 @@
 /************* *****************
-*   Eric Azevedo de Oliveira  * 
-*   Aluno da Puc              *  
-*   2 periodo                 *  
+*   Eric Azevedo de Oliveira  *
+*   Aluno da Puc              *
+*   2 periodo                 *
 *******************************/
 
 import java.io.FileWriter;
@@ -219,7 +219,7 @@ public class MergesortJ {
 
 		}
 		try {
-			/* tentar abrir o arquivo */
+			/* tentar abrir o arquivo */ ///tmp/data.csv
 			conteudoCsv = new BufferedReader(new FileReader("/tmp/data.csv"));
 			String[] saidas = new String[variarAloca];
 			int y = 0;

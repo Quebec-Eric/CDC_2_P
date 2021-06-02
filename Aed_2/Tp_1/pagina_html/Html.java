@@ -95,7 +95,10 @@ class Html {
                         } else if (resposta.charAt(z) == 251) {
                             u3++;
                         } else {
-                            consoantes++;
+                            if(TesteSupremo(resposta.charAt(z))){
+                                 consoantes++;
+                            }
+                            
                         }
                     }
                 }
@@ -143,6 +146,14 @@ class Html {
         }
 
         return vetor;
+    }
+
+    public static boolean TesteSupremo(char pato){
+       boolean saber =true;
+          if(pato=='<'||pato=='>'){
+            saber = false;
+           }
+        return saber;
     }
 
 
