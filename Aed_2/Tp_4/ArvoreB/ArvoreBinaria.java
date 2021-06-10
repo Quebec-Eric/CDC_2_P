@@ -1,3 +1,4 @@
+
 /************* *****************
 *   Eric Azevedo de Oliveira  *
 *   Aluno da Puc              *
@@ -202,88 +203,87 @@ class Musica {
 
 }
 
-
-
-class No{
- /* Variaveis utilizadas e referencias*/
+class No {
+	/* Variaveis utilizadas e referencias */
 	public Musica musicas;
 	public No esquerda;
 	public No direita;
 
-/* metodo contrutor */
-	public No(Musica musicas){
-		this(musicas,null,null);
+	/* metodo contrutor */
+	public No(Musica musicas) {
+		this(musicas, null, null);
 	}
- /* metodo contrutor com passagem das referencias*/
-	public No(Musica musicas, No esquerda, No direita){
-		this.musicas=musicas;
-		this.esquerda=esquerda;
-		this.direita=direita;
+
+	/* metodo contrutor com passagem das referencias */
+	public No(Musica musicas, No esquerda, No direita) {
+		this.musicas = musicas;
+		this.esquerda = esquerda;
+		this.direita = direita;
 	}
 }
 
-/* Inicio ArvoreB*/
+/* Inicio ArvoreB */
 
-class ArvoreB{
+class ArvoreB {
 
+	private int numeroComparacoes;
 	private No raiz;
 
-	public ArvoreB(){
-		raiz=null;
+	public ArvoreB() {
+		raiz = null;
+	}
+
+	public int getNumeroCom() {
+		return numeroComparacoes;
+	}
+
+	public void setNumeroComp() {
+		this.numeroComparacoes = 0;
 	}
 
 	public boolean pesquisaB(String id){
 		System.out.println(id);
+		numeroComparacoes++;
 		System.out.print("raiz ");
 		return pesquisarB(id,raiz);
 	}
 
-	public boolean pesquisarB(String id,No i){
+	public boolean pesquisarB(String id, No i) {
 		boolean saber;
-		if(i==null){
+		if (i == null) {
 			saber = false;
-		}
-		else if(id.equals(i.musicas.getId())){
-			saber= true;
-		}
-		else if(id.compareTo(i.musicas.getId())<0){
+		} else if (id.equals(i.musicas.getId())) {
+			saber = true;
+		} else if (id.compareTo(i.musicas.getId()) < 0) {
 			System.out.print("esq ");
-			saber=pesquisarB(id,i.esquerda);
-		}
-		else{
+			numeroComparacoes++;
+			saber = pesquisarB(id, i.esquerda);
+		} else {
 			System.out.print("dir ");
-			saber=pesquisarB(id,i.direita);
+			numeroComparacoes++;
+			saber = pesquisarB(id, i.direita);
 		}
 		return saber;
 
 	}
 
-	public void inserir(Musica musicas)throws IOException{
-		raiz=inserir(musicas,raiz);
+	public void inserir(Musica musicas) throws IOException {
+		raiz = inserir(musicas, raiz);
 	}
 
-	public No inserir(Musica x, No i)throws IOException
-	    {
-	        if(i==null)
-	        {
-	            i=new No(x);
-	        }
-	        else if(x.getId().compareTo(i.musicas.getId())<0)
-	        {
-	            i.esquerda=inserir(x, i.esquerda);
-	        }
-	        else if(x.getId().compareTo(i.musicas.getId())>0)
-	        {
-	            i.direita=inserir(x, i.direita);
-	        }
-	        else
-	        {
-	            throw new IOException("Erro ao inserir!");
-	        }
-	        return i;
-	    }
+	public No inserir(Musica x, No i) throws IOException {
+		if (i == null) {
+			i = new No(x);
+		} else if (x.getId().compareTo(i.musicas.getId()) < 0) {
+			i.esquerda = inserir(x, i.esquerda);
+		} else if (x.getId().compareTo(i.musicas.getId()) > 0) {
+			i.direita = inserir(x, i.direita);
+		} else {
+			throw new IOException("Erro ao inserir!");
+		}
+		return i;
+	}
 }
-
 
 //inicio
 public class ArvoreBinaria {
@@ -302,7 +302,7 @@ public class ArvoreBinaria {
 
 		}
 		try {
-			/* tentar abrir o arquivo */ ///tmp/data.csv
+			/* tentar abrir o arquivo */ /// tmp/data.csv
 			conteudoCsv = new BufferedReader(new FileReader("data.csv"));
 			String[] saidas = new String[variarAloca];
 			int y = 0;
@@ -317,46 +317,59 @@ public class ArvoreBinaria {
 						y++;
 					}
 				}
-		}
+			}
 
-		for (int i =0;i<variarAloca ;i++ ) {
-			for (int t =0;t<y ;t++ ) {
-				if(entradaDados[i].equals(resposta1[t].getId())){
-					eric.inserir(resposta1[t]);
-					//System.out.println(resposta1[t].getId());
+			for (int i = 0; i < variarAloca; i++) {
+				for (int t = 0; t < y; t++) {
+					if (entradaDados[i].equals(resposta1[t].getId())) {
+						eric.inserir(resposta1[t]);
+						// System.out.println(resposta1[t].getId());
+					}
 				}
 			}
-		}
-			String[] pesquisasA = new String[200];
-			int pp=0;
-			pesquisasA[pp] = MyIO.readLine();
-			/* entrada de dados */
-			while (pesquisasA[pp].equals("FIM") != true) {
-				pp += 1;
+			File arquivo = new File("matricula_arvoreBinaria.txt");
+			try {
+				if (!arquivo.exists()) {
+					arquivo.createNewFile();
+				}
+				eric.setNumeroComp();
+				FileWriter ttt = new FileWriter(arquivo);
+				BufferedWriter escrita = new BufferedWriter(ttt);
+				escrita.write("Matrucula: 694493 ");
+				String[] pesquisasA = new String[200];
+				int pp = 0;
 				pesquisasA[pp] = MyIO.readLine();
-			}
-
-			for (int tt=0;tt<pp ;tt++ ) {
-				if (eric.pesquisaB(pesquisasA[tt])) {
-					System.out.println("SIM");
+				/* entrada de dados */
+				while (pesquisasA[pp].equals("FIM") != true) {
+					pp += 1;
+					pesquisasA[pp] = MyIO.readLine();
 				}
-				else{
-					System.out.println("NAO");
-				}
-			}
 
+				for (int tt = 0; tt < pp; tt++) {
+					if (eric.pesquisaB(pesquisasA[tt])) {
+						System.out.println("SIM");
+						escrita.write(pesquisasA[tt]+" Comparac "+ eric.getNumeroCom()+" ");
+						eric.setNumeroComp();
+					} else {
+						System.out.println("NAO");
+						escrita.write(pesquisasA[tt]+" Comparac "+ eric.getNumeroCom()+" ");
+						eric.setNumeroComp();
+					}
+				}
+	long l=	System.currentTimeMillis() - tempoInicial;
+					escrita.write( "  Tempora de Ex == "+ l);
+				escrita.close();
+				ttt.close();
+
+			} catch (Exception e) {
+
+			}
 
 		} catch (IOException e) {
 			System.out.println("Erro :" + e);
 		}
 
 	}
-
-
-
-
-
-
 
 	/* Funcao onde ira alocar todas na class */
 	public static Musica extrairMusica(String linha) {
