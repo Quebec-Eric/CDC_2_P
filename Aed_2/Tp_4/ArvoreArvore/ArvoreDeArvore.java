@@ -203,95 +203,169 @@ class Musica {
 
 }
 
-class No {
-	/* Variaveis utilizadas e referencias */
-	public Musica musicas;
-	public No esquerda;
-	public No direita;
+class NoPrimeiro{
 
-	/* metodo contrutor */
-	public No(Musica musicas) {
-		this(musicas, null, null);
+  public int durationMod;
+  public NoPrimeiro esquerda;
+  public NoPrimeiro direita;
+  public NoSegundo outro;
+
+  public NoPrimeiro(int elemento){
+      this.durationMod=elemento;
+      this.esquerda=this.direita=null;
+      this.outro=null;
+  }
+  public NoPrimeiro(int elemento, NoPrimeiro esq, NoPrimeiro direita,NoSegundo outro) {
+	   this.durationMod = elemento;
+	   this.esquerda = esquerda;
+	   this.direita = direita;
+	   this.outro = outro;
 	}
 
-	/* metodo contrutor com passagem das referencias */
-	public No(Musica musicas, No esquerda, No direita) {
-		this.musicas = musicas;
-		this.esquerda = esquerda;
-		this.direita = direita;
-	}
 }
 
-/* Inicio ArvoreB */
+ class NoSegundo{
+    public Musica musicas;
+    public NoSegundo esquerda;
+    public NoSegundo direita;
 
-class ArvoreB {
-
-	private int numeroComparacoes;
-	private No raiz;
-
-	public ArvoreB() {
-		raiz = null;
+  public NoSegundo(Musica musicas) {
+	   this(musicas,null,null);
 	}
 
-	public int getNumeroCom() {
-		return numeroComparacoes;
+public NoSegundo(Musica musicas, NoSegundo esquerda, NoSegundo direita) {
+	   this.musicas = musicas;
+	   this.esquerda = esquerda;
+	   this.direita = direita;
 	}
 
-	public void setNumeroComp() {
-		this.numeroComparacoes = 0;
+ }
+
+ class Arvore{
+   private NoPrimeiro raiz;
+   	private int numeroComparacoes;
+   public Arvore() throws IOException{
+     raiz=null;
+        insetir(7);
+        insetir(3);
+        insetir(11);
+        insetir(1);
+        insetir(5);
+        insetir(9);
+        insetir(12);
+        insetir(0);
+        insetir(2);
+        insetir(4);
+        insetir(6);
+        insetir(8);
+        insetir(10);
+        insetir(13);
+        insetir(14);
+   }
+
+   private NoPrimeiro inserir(int duration, NoPrimeiro i) throws IOException{
+     if(i==null)
+      {
+          i=new NoPrimeiro(duration);
+      }
+      else if(duration<i.durationMod)
+      {
+          i.esquerda=inserir(duration, i.esquerda);
+      }
+      else if(duration>i.durationMod)
+      {
+          i.direita=inserir(duration, i.direita);
+      }
+      return i;
+   }
+   private void insetir(int idade) throws IOException {
+        raiz=inserir(idade, raiz);
+    }
+
+
+    public void inserir2(Musica musicas)  throws IOException{
+      inserirTeste(musicas,raiz);
+    }
+
+    private void inserirTeste(Musica musicas, NoPrimeiro i)  throws IOException{
+       if(musicas.getDuration_ms()%15==i.durationMod)
+       {
+        i.outro=inserirSec(musicas, i.outro);
+        }
+        else if(musicas.getDuration_ms()%15<i.durationMod && i.esquerda!=null)
+        {
+         inserirTeste(musicas, i.esquerda);
+        }
+        else if(musicas.getDuration_ms()%15>i.durationMod && i.direita!=null)
+        {
+        inserirTeste(musicas, i.direita);
+        }
+     }
+
+    private NoSegundo inserirSec(Musica x, NoSegundo i)  throws IOException{
+      if (i == null) {
+  			i = new NoSegundo(x);
+  		} else if (x.getId().compareTo(i.musicas.getId()) < 0) {
+  			i.esquerda = inserirSec(x, i.esquerda);
+  		} else if (x.getId().compareTo(i.musicas.getId()) > 0) {
+  			i.direita = inserirSec(x, i.direita);
+  		} else {
+  			throw new IOException("Erro ao inserir!");
+  		}
+  		return i;
+  	}
+
+    public boolean pesquisar(String id){
+      boolean saberV=false;
+      System.out.println(id);
+      System.out.print("raiz ");
+      return pesquisarT( id, raiz);
+    }
+    private boolean pesquisarT(String id, NoPrimeiro i){
+    boolean saberV=false;
+    if(i!=null){
+        saberV=pesquisar2(id, i.outro);
+        if(saberV==false){
+            System.out.print("esq ");
+            saberV=pesquisarT(id, i.esquerda);
+        }
+        if(saberV==false){
+
+            MyIO.print("dir ");
+            saberV=pesquisarT(id, i.direita);
+        }
+    }
+    return saberV;
+  }
+
+	private boolean pesquisar2(String x, NoSegundo i) {
+	   boolean saverV= false;
+	   if(i != null){
+		  if (x.compareTo(i.musicas.getId())==0) {
+			 saverV = true;
+		  }
+		  else{
+		      System.out.print("ESQ ");
+		 	    saverV = pesquisar2(x, i.esquerda);
+		  	     if(saverV == false){
+			            System.out.print("DIR ");
+				              saverV = pesquisar2(x, i.direita);
+			         }
+		       }
+	   }
+	   return saverV;
 	}
 
-	public boolean pesquisaB(String id){
-		System.out.println(id);
-		numeroComparacoes++;
-		System.out.print("raiz ");
-		return pesquisarB(id,raiz);
-	}
+ }
 
-	public boolean pesquisarB(String id, No i) {
-		boolean saber;
-		if (i == null) {
-			saber = false;
-		} else if (id.equals(i.musicas.getId())) {
-			saber = true;
-		} else if (id.compareTo(i.musicas.getId()) < 0) {
-			System.out.print("esq ");
-			numeroComparacoes++;
-			saber = pesquisarB(id, i.esquerda);
-		} else {
-			System.out.print("dir ");
-			numeroComparacoes++;
-			saber = pesquisarB(id, i.direita);
-		}
-		return saber;
-
-	}
-
-	public void inserir(Musica musicas) throws IOException {
-		raiz = inserir(musicas, raiz);
-	}
-
-	public No inserir(Musica x, No i) throws IOException {
-		if (i == null) {
-			i = new No(x);
-		} else if (x.getId().compareTo(i.musicas.getId()) < 0) {
-			i.esquerda = inserir(x, i.esquerda);
-		} else if (x.getId().compareTo(i.musicas.getId()) > 0) {
-			i.direita = inserir(x, i.direita);
-		} else {
-			throw new IOException("Erro ao inserir!");
-		}
-		return i;
-	}
-}
 
 //inicio
-public class ArvoreBinaria {
+public class ArvoreDeArvore {
 	public static void main(String[] args) throws IOException {
 		long tempoInicial = System.currentTimeMillis(); /* saber o tempo de duracao */
 		String linhaArquivo = "";
 		String[] entradaDados = new String[600];
-
+    Arvore eric= new Arvore();
 		int variarAloca = 0;
 		BufferedReader conteudoCsv = null;
 		entradaDados[variarAloca] = MyIO.readLine();
@@ -308,7 +382,6 @@ public class ArvoreBinaria {
 			int y = 0;
 			linhaArquivo = conteudoCsv.readLine();
 			Musica[] resposta1 = new Musica[variarAloca];
-			ArvoreB eric = new ArvoreB();
 			while ((linhaArquivo = conteudoCsv.readLine()) != null) {
 				for (int z = 0; z < variarAloca; z++) {
 
@@ -322,12 +395,13 @@ public class ArvoreBinaria {
 			for (int i = 0; i < variarAloca; i++) {
 				for (int t = 0; t < y; t++) {
 					if (entradaDados[i].equals(resposta1[t].getId())) {
-						eric.inserir(resposta1[t]);
+						eric.inserir2(resposta1[t]);
 						// System.out.println(resposta1[t].getId());
 					}
 				}
 			}
-			File arquivo = new File("694493_arvoreBinaria.txt");
+
+		/*	File arquivo = new File("694493_arvoreBinaria.txt");
 			try {
 				if (!arquivo.exists()) {
 					arquivo.createNewFile();
@@ -336,38 +410,42 @@ public class ArvoreBinaria {
 				FileWriter ttt = new FileWriter(arquivo);
 				BufferedWriter escrita = new BufferedWriter(ttt);
 				escrita.write("Matrucula: 694493 ");
-				String[] pesquisasA = new String[200];
-				int pp = 0;
-				pesquisasA[pp] = MyIO.readLine();
+
 				/* entrada de dados */
+        String[] pesquisasA = new String[200];
+        int pp = 0;
+        pesquisasA[pp] = MyIO.readLine();
 				while (pesquisasA[pp].equals("FIM") != true) {
 					pp += 1;
 					pesquisasA[pp] = MyIO.readLine();
 				}
+        for (int tt = 0; tt < pp; tt++) {
+          if (eric.pesquisar(pesquisasA[tt])) {
+            System.out.println(" SIM");
+            //escrita.write(pesquisasA[tt]+" Comparac "+ eric.getNumeroCom()+" ");
+            //eric.setNumeroComp();
+          } else {
+            System.out.println(" NAO");
+            //escrita.write(pesquisasA[tt]+" Comparac "+ eric.getNumeroCom()+" ");
+            //eric.setNumeroComp();
+          }
+        }
 
-				for (int tt = 0; tt < pp; tt++) {
-					if (eric.pesquisaB(pesquisasA[tt])) {
-						System.out.println("SIM");
-						escrita.write(pesquisasA[tt]+" Comparac "+ eric.getNumeroCom()+" ");
-						eric.setNumeroComp();
-					} else {
-						System.out.println("NAO");
-						escrita.write(pesquisasA[tt]+" Comparac "+ eric.getNumeroCom()+" ");
-						eric.setNumeroComp();
-					}
-				}
-	long l=	System.currentTimeMillis() - tempoInicial;
-					escrita.write( "  Tempora de Ex == "+ l);
-				escrita.close();
-				ttt.close();
+
+	  //long l=	System.currentTimeMillis() - tempoInicial;
+		//		escrita.write( "  Tempora de Ex == "+ l);
+    //	escrita.close();
+				//ttt.close();
 
 			} catch (Exception e) {
 
 			}
 
-		} catch (IOException e) {
+  	/*} catch (IOException e) {
 			System.out.println("Erro :" + e);
 		}
+    */
+
 
 	}
 
