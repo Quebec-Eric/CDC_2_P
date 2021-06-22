@@ -377,7 +377,7 @@ public class ArvoreDeArvore {
 		}
 		try {
 			/* tentar abrir o arquivo */ /// tmp/data.csv
-			conteudoCsv = new BufferedReader(new FileReader("data.csv"));
+			conteudoCsv = new BufferedReader(new FileReader("/tmp/data.csv"));
 			String[] saidas = new String[variarAloca];
 			int y = 0;
 			linhaArquivo = conteudoCsv.readLine();
