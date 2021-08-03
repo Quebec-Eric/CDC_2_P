@@ -105,6 +105,32 @@ class No {
 			caminharPre(i.dir); // Elementos da direita.
 		}
 	}
+	public void ImprimeNosInternosPreOrdem(No no) {
+   if (no != null) {
+
+         System.out.print(no.elemento);
+      ImprimeNosInternosPreOrdem(no.esq);
+      ImprimeNosInternosPreOrdem(no.dir);
+   }
+}
+
+public void ImprimeNosInternosPreOrdem(){
+	ImprimeNosInternosPreOrdem(raiz);
+}
+
+public void ImprimeNosInternosPosOrdem(){
+ImprimeNosInternosPosOrdem(raiz);
+}
+
+public void ImprimeNosInternosPosOrdem(No no) {
+   if (no != null) {
+      ImprimeNosInternosPosOrdem(no.esq);
+      ImprimeNosInternosPosOrdem(no.dir);
+
+
+         System.out.print(no.elemento);
+   }
+}
 
 	/**
 	 * Metodo publico iterativo para exibir elementos.
@@ -428,28 +454,39 @@ class No {
       return resp;
    }
 
+	 public int misterio(){
+		 return misterio(raiz);
+	 }
+
+	public int misterio(No no) {
+    return (no == null)? 0: misterio(no.esq) + misterio(no.dir) + 1;
+ }
+
 }
 
 public class ArvoreE {
    public static void main(String[] args) throws Exception {
       ArvoreBinaria arvoreBinaria = new ArvoreBinaria();
 
-      arvoreBinaria.inserir(3);
       arvoreBinaria.inserir(5);
-      arvoreBinaria.inserir(1);
       arvoreBinaria.inserir(8);
+      arvoreBinaria.inserir(45);
+      arvoreBinaria.inserir(18);
       arvoreBinaria.inserir(2);
-      arvoreBinaria.inserir(4);
-      arvoreBinaria.inserir(7);
-      arvoreBinaria.inserir(6);
+      arvoreBinaria.inserir(16);
+      arvoreBinaria.inserir(9);
+      arvoreBinaria.inserir(31);
+      arvoreBinaria.inserir(23);
+      arvoreBinaria.inserir(40);
+     //System.out.println("Profu: " + arvoreBinaria.getAltura(7));
 
-     System.out.println("Profu: " + arvoreBinaria.getAltura(7));
+      System.out.println("respota: " + arvoreBinaria.misterio());
+    //  System.out.println("Maior valor: " + arvoreBinaria.getMaior());
 
-      System.out.println("Menor valor: " + arvoreBinaria.getMenor());
-      System.out.println("Maior valor: " + arvoreBinaria.getMaior());
-
-      arvoreBinaria.caminharCentral();
-      arvoreBinaria.caminharPre();
+      arvoreBinaria.ImprimeNosInternosPreOrdem();
+					System.out.println("");
+      arvoreBinaria. ImprimeNosInternosPosOrdem();
+			System.out.println("");
       arvoreBinaria.caminharPos();
 
       arvoreBinaria.remover(6);
