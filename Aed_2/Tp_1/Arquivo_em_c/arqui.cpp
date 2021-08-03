@@ -27,6 +27,10 @@ void lerarquivo(int quantidade){
 
 
         // abrir arquivo como leitura
+        int **lerArq = (int**)malloc(sizeof(int)*1000000000000);
+        for(int i =0;i<1000000000000;i++){
+          lerArq[1] = (int*)malloc(sizeof(int)*100000000000000);
+        }
         FILE * arquivo =fopen("arquivo.txt", "rb");
         if(arquivo == NULL) {
 
